@@ -27,6 +27,8 @@ public class SpringController : BaseController
 
     private void Update()
     {
+        if ( !IsMainController ) return;
+
         if ( Body.GetComponent<Rigidbody>().isKinematic )
         {
             Vector3 forward = Camera.main.transform.forward;

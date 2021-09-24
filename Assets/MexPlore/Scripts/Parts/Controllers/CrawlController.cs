@@ -26,20 +26,12 @@ public class CrawlController : BaseController
 
     void Update()
     {
+        if ( !IsMainController ) return;
+
         // Elbow global up?
         ElbowTarget.transform.position = Body.transform.position + Vector3.up * 4;
 
-        Vector3 forward = Camera.main.transform.forward;
-        forward.y = 0;
-        Vector3 right = Camera.main.transform.right;
-        right.y = 0;
-        var hor = Input.GetAxis( "Horizontal" );
-        var ver = Input.GetAxis( "Vertical" );
-        Vector3 dir = forward * ver + right * hor;
-        if ( dir.magnitude > 1 )
-        {
-            dir /= dir.magnitude;
-        }
+        Vector3 dir = MexPlore.GetCameraDirectionalInput();
         Vector3 target = dir * Distance;
 
         bool hover = false;

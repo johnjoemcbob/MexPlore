@@ -2877,7 +2877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f056487933462438d46efc6926ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsMainController: 1
+  IsMainController: 0
   MoveSpeed: 24
   OvershootMultiplier: 6
   BetweenMoveDelay: 0.01

@@ -292,6 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432e53801f923324abf262210b5db484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMainController: 0
   LeanMax: 3
   LeanHeightMultipier: 0.25
   BodyHeightOffset: 5

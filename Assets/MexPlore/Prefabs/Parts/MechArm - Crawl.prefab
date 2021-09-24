@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c552c3ef341a84469677e438c04eae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMainController: 0
   Distance: 10
   IdleDistance: 1
   HoverDistance: 1

@@ -202,7 +202,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313491709783950478}
-  m_LocalRotation: {x: -0.70070916, y: -0.70070916, z: 0.09490379, w: 0.09490379}
+  m_LocalRotation: {x: -0.7007091, y: -0.70070916, z: 0.09490387, w: 0.09490388}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -296,7 +296,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313491709865378021}
-  m_LocalRotation: {x: 0.13421443, y: -0, z: -0, w: 0.9909524}
+  m_LocalRotation: {x: 0.13421428, y: -0, z: -0, w: 0.9909524}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -480,8 +480,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f056487933462438d46efc6926ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsMainController: 1
+  IsMainController: 0
   MoveSpeed: 7
+  OvershootMultiplier: 1
   BetweenMoveDelay: 0.1
   BodyHeightOffset: 3
   LegLerpDuration: 0.3
@@ -620,7 +621,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313491711586757424}
-  m_LocalRotation: {x: 0.6816319, y: 0.6816319, z: -0.18809041, w: 0.18809041}
+  m_LocalRotation: {x: 0.68163186, y: 0.6816319, z: -0.18809038, w: 0.18809038}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1041,7 +1042,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5643509644533181657}
-  m_LocalRotation: {x: -0.70070916, y: -0.7007091, z: 0.09490399, w: 0.09490401}
+  m_LocalRotation: {x: -0.70070916, y: -0.70070916, z: 0.0949039, w: 0.0949039}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1289,7 +1290,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7043850430036322050}
-  m_LocalRotation: {x: 0.1342141, y: -0, z: -0, w: 0.99095243}
+  m_LocalRotation: {x: 0.13421428, y: -0, z: -0, w: 0.9909524}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1527,7 +1528,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7955064433740063396}
-  m_LocalRotation: {x: 0.6816319, y: 0.68163186, z: -0.18809035, w: 0.18809038}
+  m_LocalRotation: {x: 0.6816319, y: 0.6816319, z: -0.18809041, w: 0.18809041}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

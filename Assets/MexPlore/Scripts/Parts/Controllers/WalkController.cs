@@ -23,7 +23,6 @@ public class WalkController : BaseController
     const short RIGHT = 1;
 
     [Header( "Variables" )]
-    public bool IsMainController = true;
     public float MoveSpeed = 5;
     public float OvershootMultiplier = 1;
     public float BetweenMoveDelay = 0.1f;

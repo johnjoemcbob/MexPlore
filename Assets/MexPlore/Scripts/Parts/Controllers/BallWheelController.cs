@@ -25,6 +25,8 @@ public class BallWheelController : BaseController
 
     private void FixedUpdate()
     {
+        if ( !IsMainController ) return;
+
         Vector3 forward = Camera.main.transform.forward;
         forward.y = 0;
         Vector3 right = Camera.main.transform.right;
