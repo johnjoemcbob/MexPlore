@@ -41,6 +41,10 @@ public class BallWheelController : BaseController
         CurrentBodyHeight = Mathf.Lerp( CurrentBodyHeight, BodyHeightOffset, Time.deltaTime * 5 );
         Body.transform.position = FootPos + Vector3.up * ( CurrentBodyHeight - ( dir.magnitude ) * LeanHeightMultipier ) + dir * LeanMax;
         Foot.position = FootPos;
+        if ( dir.magnitude != 0 )
+        {
+            Body.GetComponent<MechBody>().SetTargetDirection( dir.normalized );
+        }
 
         // Knee should be in opposite direction of dir
         Knee.position = Body.transform.position - dir * 10;

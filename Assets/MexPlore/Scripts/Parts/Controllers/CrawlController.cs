@@ -14,7 +14,13 @@ public class CrawlController : BaseController
     public GameObject ElbowTarget;
     public GameObject HandTarget;
 
+    [Header( "Assets" )]
+    public AudioClip SoundReach;
+    public AudioClip SoundGrab;
+    public AudioClip SoundPull;
+
     private Vector3 LastDirection = Vector3.forward;
+    private Vector3 LastSoundDirection = Vector3.zero;
     private Vector3 FreezePos = Vector3.zero;
     private Vector3 FreezeHandPos = Vector3.zero;
 
@@ -42,17 +48,17 @@ public class CrawlController : BaseController
         {
             FreezePos = Body.transform.position;
             FreezeHandPos = HandTarget.transform.position;
+
+            if ( SoundGrab != null )
+			{
+                AudioSource.PlayClipAtPoint( SoundGrab, transform.position );
+			}
         }
         if ( Input.GetButton( "Jump" ) )
         {
             // Freeze the hand, instead move the body towards the distance
-            //Body.transform.position = HandTarget.transform.position - target;
-            //Body.GetComponent<Rigidbody>().MovePosition( HandTarget.transform.position - target );
-            //HandTarget.transform.position = Body.transform.position + target;
-
-            //Debug.Log( dir.magnitude );
-            //Body.transform.position = FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude );
-            Body.GetComponent<Rigidbody>().MovePosition( FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude ) );
+            Body.transform.position = FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude );
+            //Body.GetComponent<Rigidbody>().MovePosition( FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude ) );
             HandTarget.transform.position = FreezePos + ( FreezeHandPos - Body.transform.position ) * ( dir.magnitude ) / 2;
         }
         else
@@ -69,6 +75,8 @@ public class CrawlController : BaseController
 
                 // Move the hand in the direction
                 HandTarget.transform.position = Body.transform.position + target;
+                Body.GetComponent<MechBody>().SetTargetDirection( dir.normalized );
+
                 hover = true;
             }
         }
@@ -91,6 +99,28 @@ public class CrawlController : BaseController
             {
                 HandTarget.transform.position += Vector3.up * HoverDistance;
             }
+        }
+
+        // Sounds
+        float change = dir.magnitude - LastSoundDirection.magnitude;
+        if ( Mathf.Abs( change ) > 0.5f )
+		{
+            if ( change > 0 )
+            {
+                if ( SoundGrab != null )
+                {
+                    AudioSource.PlayClipAtPoint( SoundReach, transform.position );
+                }
+            }
+            else
+            {
+                if ( SoundGrab != null )
+                {
+                    AudioSource.PlayClipAtPoint( SoundPull, transform.position );
+                }
+            }
+
+            LastSoundDirection = dir;
         }
     }
 }

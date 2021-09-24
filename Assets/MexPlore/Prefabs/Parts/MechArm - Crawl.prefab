@@ -77,6 +77,9 @@ MonoBehaviour:
   Body: {fileID: 0}
   ElbowTarget: {fileID: 4519017358471803429}
   HandTarget: {fileID: 4519017359491354956}
+  SoundReach: {fileID: 8300000, guid: 8c69dca4b9b2a4d458da248131b5522d, type: 3}
+  SoundGrab: {fileID: 8300000, guid: 70ef78ef234345948865f1ead6fba04b, type: 3}
+  SoundPull: {fileID: 8300000, guid: e3acab0a865b8644c9c36919c73bc64a, type: 3}
 --- !u!1 &4519017357892186154
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cba9c1e19f8950442aca4dcdd26e2cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -410,7 +413,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cba9c1e19f8950442aca4dcdd26e2cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -801,8 +801,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsMainController: 1
-  MoveSpeed: 1
-  BetweenMoveDelay: 0.1
+  MoveSpeed: 12
+  OvershootMultiplier: 4
+  BetweenMoveDelay: 0.01
   BodyHeightOffset: 1
   LegLerpDuration: 0.3
   Body: {fileID: 0}
@@ -813,6 +814,14 @@ MonoBehaviour:
   - Legs:
     - {fileID: 8156955483641995670}
     - {fileID: 7540815885910216218}
+  SoundBankLegRaise:
+  - {fileID: 8300000, guid: 0759c66247b12644ab77ca7dc59826d9, type: 3}
+  - {fileID: 8300000, guid: 8c69dca4b9b2a4d458da248131b5522d, type: 3}
+  - {fileID: 8300000, guid: e3acab0a865b8644c9c36919c73bc64a, type: 3}
+  SoundBankLegLower: []
+  SoundBankFootstep:
+  - {fileID: 8300000, guid: 04e02592ec9fe2f42888429d5aecd962, type: 3}
+  - {fileID: 8300000, guid: efa870ef11baafb41a5c645181d231df, type: 3}
 --- !u!1 &3915425333533415354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,7 +1812,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6039068926120229595}
-  m_LocalRotation: {x: -0.19934303, y: 0.35595268, z: 0.078003824, w: 0.90965676}
+  m_LocalRotation: {x: -0.19934297, y: 0.35595268, z: 0.07800382, w: 0.90965676}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2029,7 +2038,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6659079336854388605}
-  m_LocalRotation: {x: -0.5277992, y: -0.5277992, z: 0.47056141, w: -0.4705613}
+  m_LocalRotation: {x: -0.5277992, y: -0.52779925, z: 0.4705614, w: -0.47056136}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2883,7 +2892,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8961630593650979072}
-  m_LocalRotation: {x: 0.17764503, y: 0.5949809, z: -0.6844284, w: -0.38209647}
+  m_LocalRotation: {x: 0.17764506, y: 0.59498096, z: -0.6844284, w: -0.3820964}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

@@ -2878,10 +2878,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsMainController: 1
-  MoveSpeed: 1
-  BetweenMoveDelay: 0.1
+  MoveSpeed: 24
+  OvershootMultiplier: 6
+  BetweenMoveDelay: 0.01
   BodyHeightOffset: 1
-  LegLerpDuration: 0.3
+  LegLerpDuration: 0.1
   Body: {fileID: 0}
   Legs:
   - Legs:
@@ -2892,6 +2893,14 @@ MonoBehaviour:
     - {fileID: 1575214294896488393}
     - {fileID: 2440513166791379066}
     - {fileID: 885316720162947141}
+  SoundBankLegRaise:
+  - {fileID: 8300000, guid: 0759c66247b12644ab77ca7dc59826d9, type: 3}
+  - {fileID: 8300000, guid: 8c69dca4b9b2a4d458da248131b5522d, type: 3}
+  - {fileID: 8300000, guid: e3acab0a865b8644c9c36919c73bc64a, type: 3}
+  SoundBankLegLower: []
+  SoundBankFootstep:
+  - {fileID: 8300000, guid: 04e02592ec9fe2f42888429d5aecd962, type: 3}
+  - {fileID: 8300000, guid: efa870ef11baafb41a5c645181d231df, type: 3}
 --- !u!1 &5960927923611949541
 GameObject:
   m_ObjectHideFlags: 0

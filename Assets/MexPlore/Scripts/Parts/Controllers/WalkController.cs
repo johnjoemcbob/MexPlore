@@ -25,6 +25,7 @@ public class WalkController : BaseController
     [Header( "Variables" )]
     public bool IsMainController = true;
     public float MoveSpeed = 5;
+    public float OvershootMultiplier = 1;
     public float BetweenMoveDelay = 0.1f;
     public float BodyHeightOffset = 1;
     public float LegLerpDuration = 1;
@@ -33,7 +34,14 @@ public class WalkController : BaseController
     public GameObject Body;
     public LegArray[] Legs;
 
+    [Header( "Assets" )]
+    public AudioClip[] SoundBankLegRaise;
+    public AudioClip[] SoundBankLegLower;
+    public AudioClip[] SoundBankFootstep;
+
     private LegData[][] LegDatas;
+    private float NormalisedHeight = 0;
+    private Vector3 LastDirection = Vector3.zero;
 
     #region MonoBehaviour
     void OnEnable()
@@ -64,7 +72,10 @@ public class WalkController : BaseController
         if ( IsMainController )
         {
             // Face camera forward
-            Body.transform.eulerAngles = new Vector3( 0, Camera.main.transform.eulerAngles.y, 0 );
+            //Body.transform.eulerAngles = new Vector3( 0, Camera.main.transform.eulerAngles.y, 0 );
+            Vector3 camdir = Camera.main.transform.forward;
+            camdir.y = 0;
+            Body.GetComponent<MechBody>().SetTargetDirection( camdir.normalized );
 
             // Movement
             Vector3 forward = Camera.main.transform.forward;
@@ -78,8 +89,11 @@ public class WalkController : BaseController
             {
                 dir /= dir.magnitude;
             }
-            //Body.transform.position +=
-            Body.GetComponent<Rigidbody>().MovePosition( Body.transform.position + dir * MoveSpeed );// * Time.deltaTime );
+            LastDirection = dir;
+            Vector3 pos = Body.transform.position + dir * MoveSpeed * Time.deltaTime;
+                pos.y = NormalisedHeight;
+            Body.transform.position = pos;
+            Body.GetComponent<Rigidbody>().MovePosition( pos );
         }
 
         UpdateLegs();
@@ -103,7 +117,7 @@ public class WalkController : BaseController
                 positions++;
             }
         }
-        Body.transform.position = new Vector3( Body.transform.position.x, ( pos / positions ).y + BodyHeightOffset, Body.transform.position.z );
+        NormalisedHeight = ( pos / positions ).y + BodyHeightOffset;
     }
     #endregion
 
@@ -137,6 +151,9 @@ public class WalkController : BaseController
 
     public void TryMoveLeg( Transform leg, Vector3 pos )
     {
+        // Add current direction of movement to the target pos as overshoot
+        pos += LastDirection * OvershootMultiplier;
+
         int side = GetLegSide( leg );
         int other = GetOtherSide( side );
         int location = GetLegIndex( leg );
@@ -169,6 +186,13 @@ public class WalkController : BaseController
 
     IEnumerator MoveLeg( int side, int location, Vector3 pos )
     {
+        // Play leg raise sound
+        if ( SoundBankLegRaise.Length > 0 )
+        {
+            AudioSource.PlayClipAtPoint( SoundBankLegRaise[UnityEngine.Random.Range( 0, SoundBankLegRaise.Length )], Legs[side].Legs[location].position );
+        }
+        bool lowered = false;
+
         LegDatas[side][location].IsMoving = true;
         {
             Transform leg = Legs[side].Legs[location];
@@ -188,6 +212,16 @@ public class WalkController : BaseController
                     // Then move to the new position
                     target = pos;
                     progress -= 0.5f; // Normalised to 0.5 for lerp progress
+
+                    // Play leg raise sound
+                    if ( !lowered )
+                    {
+                        if ( SoundBankLegLower.Length > 0 )
+                        {
+                            AudioSource.PlayClipAtPoint( SoundBankLegLower[UnityEngine.Random.Range( 0, SoundBankLegLower.Length )], Legs[side].Legs[location].position );
+                        }
+                        lowered = true;
+                    }
                 }
                 Vector3 lerpedpos = Vector3.Lerp( legstartpos, target, progress * 2 );
                 Legs[side].Legs[location].position = lerpedpos;
@@ -198,6 +232,12 @@ public class WalkController : BaseController
             }
         }
         LegDatas[side][location].IsMoving = false;
+
+        // Play footstep sound
+        if ( SoundBankFootstep.Length > 0 )
+        {
+            AudioSource.PlayClipAtPoint( SoundBankFootstep[UnityEngine.Random.Range( 0, SoundBankFootstep.Length )], pos );
+        }
     }
     #endregion
 
