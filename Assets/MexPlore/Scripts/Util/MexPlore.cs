@@ -27,4 +27,20 @@ public static class MexPlore
         }
         return dir;
     }
+
+    public static Vector3 RaycastToGround( Vector3 pos )
+    {
+        // Raycast on to ground
+        RaycastHit hit;
+        int mask = 1 << LayerMask.NameToLayer( "Ground" );
+        float raydist = 10;
+        float updist = 10;
+        Vector3 start = pos + Vector3.up * updist;
+        Vector3 raydir = -Vector3.up;
+        if ( Physics.Raycast( start, raydir, out hit, updist + raydist, mask ) )
+        {
+            pos = hit.point;
+        }
+        return pos;
+    }
 }

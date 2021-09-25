@@ -43,7 +43,7 @@ public class IncrediMech : MechBody
 		if ( !WalkerState )
 		{
 			Vector3 dir = MexPlore.GetCameraDirectionalInput();
-			GetComponent<Rigidbody>().AddForceAtPosition( dir * RollForce + Vector3.up * RollUpForce, transform.position + ForceOffset, ForceMode.Force );
+			GetComponent<Rigidbody>().AddForceAtPosition( dir * RollForce + Vector3.up * RollUpForce, transform.position + ForceOffset, ForceMode.VelocityChange );
 		}
 	}
 
@@ -59,6 +59,7 @@ public class IncrediMech : MechBody
 			body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 			GetComponentInChildren<WalkController>().IsMainController = true;
 			Head.localPosition = StartHeadPos;
+			GetComponentInChildren<MechCockpitDock>().CanUnDock = true;
 		}
 		else
 		{
@@ -66,6 +67,7 @@ public class IncrediMech : MechBody
 			body.constraints = RigidbodyConstraints.None;
 			GetComponentInChildren<WalkController>().IsMainController = false;
 			Head.localPosition = Vector3.zero;
+			GetComponentInChildren<MechCockpitDock>().CanUnDock = false;
 		}
 		RotateTowardsTarget = WalkerState;
 

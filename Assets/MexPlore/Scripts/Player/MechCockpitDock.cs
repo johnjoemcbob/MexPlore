@@ -6,6 +6,7 @@ public class MechCockpitDock : MonoBehaviour
 {
 	public static MechCockpitDock CurrentInUse;
 
+	public bool CanUnDock = true;
 	public float DockCooldown = 0.25f;
 
 	private HeliCockpit Cockpit;
@@ -72,26 +73,33 @@ public class MechCockpitDock : MonoBehaviour
 	{
 		if ( Cockpit != null )
 		{
-			// Undock + start the heli
-			Cockpit.transform.SetParent( null );
-			Cockpit.enabled = true;
-			CurrentDockCooldown = Time.time + DockCooldown;
-
-			// Add rigidbody
-			Cockpit.AddRigidbody();
-
-			// Visuals
-			GetComponent<MeshRenderer>().enabled = true;
-			// TODO unfold the heli blades
-
-			// Disable mech controls
-			GetComponentInParent<MechBody>().IsMainController = false;
-			foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
+			if ( CanUnDock )
 			{
-				controller.IsMainController = false;
-			}
+				// Undock + start the heli
+				Cockpit.transform.SetParent( null );
+				Cockpit.enabled = true;
+				CurrentDockCooldown = Time.time + DockCooldown;
 
-			Cockpit = null;
+				// Add rigidbody
+				Cockpit.AddRigidbody();
+
+				// Visuals
+				GetComponent<MeshRenderer>().enabled = true;
+				// TODO unfold the heli blades
+
+				// Disable mech controls
+				GetComponentInParent<MechBody>().IsMainController = false;
+				foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
+				{
+					controller.IsMainController = false;
+				}
+
+				Cockpit = null;
+			}
+			else
+			{
+				// TODO meepmerp error noise here
+			}
 		}
 	}
 }

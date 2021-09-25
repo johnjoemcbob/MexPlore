@@ -75,16 +75,7 @@ public class CrawlController : BaseController
 
         if ( raycast )
         {
-            // Raycast to ground
-            RaycastHit hit;
-            int mask = 1 << LayerMask.NameToLayer( "Ground" );
-            float dist = 10000;
-            Vector3 start = HandTarget.transform.position + Vector3.up * dist / 4;
-            Vector3 raydir = -Vector3.up;
-            if ( Physics.Raycast( start, raydir, out hit, dist, mask ) )
-            {
-                HandTarget.transform.position = hit.point;
-            }
+            HandTarget.transform.position = MexPlore.RaycastToGround( HandTarget.transform.position );
 
             // Hover if hovering
             if ( hover )

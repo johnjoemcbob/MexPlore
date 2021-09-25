@@ -36,8 +36,6 @@ public class InverseKinematics : MonoBehaviour
 
 	#region Variables - Private
 	float angle;
-	float upperArm_Length;
-	float forearm_Length;
 	float arm_Length;
 	float targetDistance;
 	float adyacent;
@@ -66,16 +64,19 @@ public class InverseKinematics : MonoBehaviour
 
 			Vector3 cross = Vector3.Cross (elbow.position - upperArm.position, forearm.position - upperArm.position);
 
-			upperArm_Length = Vector3.Distance( upperArm.position, forearm.position );
-			forearm_Length = Vector3.Distance( forearm.position, hand.position );
-			arm_Length = upperArm_Length + forearm_Length;
+			arm_Length = UpperArmLength + LowerArmLength;
 			targetDistance = Vector3.Distance( upperArm.position, target.position );
 			targetDistance = Mathf.Min( targetDistance, arm_Length - arm_Length * 0.001f );
 
-			adyacent = ( ( upperArm_Length * upperArm_Length ) - ( forearm_Length * forearm_Length ) + ( targetDistance * targetDistance ) ) / ( 2 * targetDistance );
+			adyacent = ( ( UpperArmLength * UpperArmLength ) - ( LowerArmLength * LowerArmLength ) + ( targetDistance * targetDistance ) ) / ( 2 * targetDistance );
 
-			angle = Mathf.Acos( adyacent / upperArm_Length ) * Mathf.Rad2Deg;
+			angle = Mathf.Acos( adyacent / UpperArmLength ) * Mathf.Rad2Deg;
 
+			// Guard against NaN (Incredimech, fold in on self)
+			if ( float.IsNaN( angle ) )
+			{
+				angle = 0;
+			}
 			upperArm.RotateAround( upperArm.position, cross, -angle );
 
 			forearm.LookAt( target, cross );

@@ -31,17 +31,7 @@ public class SpringController : BaseController
 
         if ( Body.GetComponent<Rigidbody>().isKinematic )
         {
-            Vector3 forward = Camera.main.transform.forward;
-            forward.y = 0;
-            Vector3 right = Camera.main.transform.right;
-            right.y = 0;
-            var hor = Input.GetAxis( "Horizontal" );
-            var ver = Input.GetAxis( "Vertical" );
-            Vector3 dir = forward * ver + right * hor;
-            if ( dir.magnitude > 1 )
-            {
-                dir /= dir.magnitude;
-            }
+            Vector3 dir = MexPlore.GetCameraDirectionalInput();
 
             // Lean body towards forward dir based on camera
             CurrentBodyHeight = Mathf.Lerp( CurrentBodyHeight, BodyHeightOffset, Time.deltaTime * 5 );
