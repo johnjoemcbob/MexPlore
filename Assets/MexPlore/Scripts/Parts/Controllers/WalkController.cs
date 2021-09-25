@@ -23,6 +23,7 @@ public class WalkController : BaseController
     const short RIGHT = 1;
 
     [Header( "Variables" )]
+    public bool DisabledStillNormaliseBodyHeight = false;
     public float MoveSpeed = 5;
     public float OvershootMultiplier = 1;
     public float BetweenMoveDelay = 0.1f;
@@ -93,6 +94,13 @@ public class WalkController : BaseController
                 pos.y = NormalisedHeight;
             Body.transform.position = pos;
             Body.GetComponent<Rigidbody>().MovePosition( pos );
+        }
+        else if ( DisabledStillNormaliseBodyHeight )
+        {
+            // If not in control, still normalise body height relative to feet
+            Vector3 pos = Body.transform.position;
+                pos.y = NormalisedHeight;
+            Body.transform.position = pos;
         }
 
         UpdateLegs();

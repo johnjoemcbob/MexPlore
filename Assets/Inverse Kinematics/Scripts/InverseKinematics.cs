@@ -8,6 +8,8 @@ public class InverseKinematics : MonoBehaviour
 	#region Variables - Inspector
 	[Header( "Variables" )]
 	public float TargetMaxDistance = 10;
+	public float UpperArmLength = 2.5f;
+	public float LowerArmLength = 2.5f;
 
 	[Header( "Offsets" )]
 	public Vector3 uppperArm_OffsetRotation;
@@ -15,6 +17,8 @@ public class InverseKinematics : MonoBehaviour
 	public Vector3 hand_OffsetRotation;
 
 	[Header( "References" )]
+	public Transform VisualUpperArm;
+	public Transform VisualLowerArm;
 	public Transform upperArm;
 	public Transform forearm;
 	public Transform hand;
@@ -23,6 +27,7 @@ public class InverseKinematics : MonoBehaviour
 	public Transform TargetTarget;
 
 	[Space(20)]
+	public bool PhysicsEnabled = true;
 	public bool handMatchesTargetRotation = true;
 
 	[Space(20)]
@@ -40,8 +45,11 @@ public class InverseKinematics : MonoBehaviour
 
 	void LateUpdate()
 	{
+		// Extend arms to correct length
+		UpdateArmLength();
+
 		// If there is a TargetTarget, then the normal target gets moved to this point at variable distance interval
-		if ( TargetTarget != null )
+		if ( TargetTarget != null && PhysicsEnabled )
 		{
 			float dist = ( target.position - TargetTarget.position ).sqrMagnitude;
 			if ( dist > TargetMaxDistance )
@@ -109,5 +117,45 @@ public class InverseKinematics : MonoBehaviour
 				Gizmos.DrawLine( forearm.position, elbow.position );
 			}
 		}
+	}
+
+	void UpdateArmLength()
+	{
+		if ( VisualUpperArm != null )
+		{
+			Vector3 scale = VisualUpperArm.localScale;
+			{
+				scale.z = UpperArmLength;
+			}
+			VisualUpperArm.localScale = scale;
+			Vector3 pos = VisualUpperArm.localPosition;
+			{
+				pos.z = UpperArmLength / 2;
+			}
+			VisualUpperArm.localPosition = pos;
+		}
+		//else
+		//{
+		//	VisualUpperArm = transform.Find( "ShoulderJoint/UpperArm" );
+		//}
+		if ( VisualLowerArm != null )
+		{
+			Vector3 scale = VisualLowerArm.localScale;
+			{
+				scale.z = LowerArmLength;
+			}
+			VisualLowerArm.localScale = scale;
+			Vector3 pos = VisualLowerArm.localPosition;
+			{
+				pos.z = LowerArmLength / 2;
+			}
+			VisualLowerArm.localPosition = pos;
+		}
+		//else
+		//{
+		//	VisualLowerArm = transform.Find( "ShoulderJoint/ElbowJoint/ForeArm" );
+		//}
+		forearm.localPosition = new Vector3( 0, 0, 1 ) * UpperArmLength;
+		hand.localPosition = new Vector3( 0, 0, 1 ) * LowerArmLength;
 	}
 }

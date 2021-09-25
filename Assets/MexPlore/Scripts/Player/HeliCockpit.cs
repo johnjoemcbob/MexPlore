@@ -22,7 +22,12 @@ public class HeliCockpit : MonoBehaviour
     private Vector3 LastDirection = Vector3.zero;
     private float CurrentBladeSpeed = 0;
 
-    void FixedUpdate()
+	private void Start()
+	{
+        AddRigidbody();
+	}
+
+	void FixedUpdate()
     {
         // Get input
         bool thrust = Input.GetButton( "Jump" );
@@ -56,5 +61,18 @@ public class HeliCockpit : MonoBehaviour
 
         // Apply force towards rotor direction * space bar
         GetComponent<Rigidbody>().AddForce( Rotor.up * CurrentBladeSpeed * BladeMaxForce + Vector3.up * CurrentBladeSpeed * BladeUpwardForce, ForceMode.Acceleration );
+    }
+
+    public void AddRigidbody()
+	{
+        var body = gameObject.AddComponent<Rigidbody>();
+        {
+            body.mass = 1;
+            body.drag = 0;
+            body.angularDrag = 0.05f;
+            body.useGravity = true;
+            body.isKinematic = false;
+            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
 }

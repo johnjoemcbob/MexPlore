@@ -53,11 +53,15 @@ public class MechCockpitDock : MonoBehaviour
 		Cockpit.transform.localPosition = Vector3.zero;
 		Cockpit.transform.localEulerAngles = Vector3.zero;
 
+		// Remove rigidbody
+		Destroy( Cockpit.GetComponent<Rigidbody>() );
+
 		// Visuals
 		GetComponent<MeshRenderer>().enabled = false;
 		// TODO fold the heli blades
 
 		// Enable mech controls
+		GetComponentInParent<MechBody>().IsMainController = true;
 		foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
 		{
 			controller.IsMainController = true;
@@ -71,14 +75,17 @@ public class MechCockpitDock : MonoBehaviour
 			// Undock + start the heli
 			Cockpit.transform.SetParent( null );
 			Cockpit.enabled = true;
-			Cockpit.GetComponent<Rigidbody>().isKinematic = false;
 			CurrentDockCooldown = Time.time + DockCooldown;
+
+			// Add rigidbody
+			Cockpit.AddRigidbody();
 
 			// Visuals
 			GetComponent<MeshRenderer>().enabled = true;
 			// TODO unfold the heli blades
 
 			// Disable mech controls
+			GetComponentInParent<MechBody>().IsMainController = false;
 			foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
 			{
 				controller.IsMainController = false;
