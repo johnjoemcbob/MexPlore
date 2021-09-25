@@ -113,14 +113,15 @@ public class WalkController : BaseController
         int positions = 0;
         Vector3 pos = Vector3.zero;
         {
+            // Find the IK of each leg target to get the ACTUAL hand/foot pos rather than desired!
             for ( int leg = 0; leg < Legs[LEFT].Legs.Length; leg++ )
             {
-                pos += LegDatas[LEFT][leg].Position;
+                pos += Legs[LEFT].Legs[leg].GetComponentInParent<InverseKinematics>().hand.position;
                 positions++;
             }
             for ( int leg = 0; leg < Legs[RIGHT].Legs.Length; leg++ )
             {
-                pos += LegDatas[RIGHT][leg].Position;
+                pos += Legs[RIGHT].Legs[leg].GetComponentInParent<InverseKinematics>().hand.position;
                 positions++;
             }
         }
