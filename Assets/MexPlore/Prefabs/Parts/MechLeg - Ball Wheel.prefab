@@ -47,15 +47,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 5563057010213361833}
   forearm: {fileID: 5563057009502565246}
   hand: {fileID: 5563057010099756224}
   elbow: {fileID: 5563057009912827938}
   target: {fileID: 5563057010546488137}
   TargetTarget: {fileID: 0}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &3043164136984358737
@@ -118,7 +123,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -362,7 +367,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -730,7 +735,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

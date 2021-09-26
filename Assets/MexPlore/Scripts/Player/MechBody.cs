@@ -12,11 +12,25 @@ public class MechBody : MonoBehaviour
 	public float RotateEpsilon = 0.5f;
 	public float RotateVolumeMultiplier = 0.5f;
 	public float RotateVolumeMax = 0.5f;
+	public bool TorsoLag = false;
+	public float TorsoLagSpeed = 1;
+
+	[Header( "Base - References" )]
+	public Transform Torso;
 
 	[Header( "Base - Assets" )]
 	public AudioSource RotationSource;
 
 	private Vector3 TargetDirection;
+	private Quaternion TorsoRotation;
+
+	public virtual void Awake()
+	{
+		if ( TorsoLag )
+		{
+			TorsoRotation = Torso.rotation;
+		}
+	}
 
 	public virtual void Update()
 	{
@@ -25,7 +39,13 @@ public class MechBody : MonoBehaviour
 		if ( RotateTowardsTarget )
 		{
 			Quaternion target = Quaternion.LookRotation( TargetDirection, Vector3.up );
+			Quaternion start = transform.rotation;
 			transform.rotation = Quaternion.Lerp( transform.rotation, target, Time.deltaTime * RotateSpeed );
+			if ( TorsoLag )
+			{
+				TorsoRotation = Quaternion.Lerp( TorsoRotation, target, Time.deltaTime * TorsoLagSpeed );
+				Torso.rotation = TorsoRotation;
+			}
 
 			float ang = Quaternion.Angle( transform.rotation, target );
 			if ( ang > RotateEpsilon )

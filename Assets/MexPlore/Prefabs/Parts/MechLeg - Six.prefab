@@ -48,15 +48,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 8201133364007005698}
   forearm: {fileID: 769809701657368718}
   hand: {fileID: 4370172593394309164}
   elbow: {fileID: 92536536947015351}
   target: {fileID: 885316720162947141}
   TargetTarget: {fileID: 7135424423895757302}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &131207523155930135
@@ -297,7 +302,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -475,15 +480,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 5960927924641551200}
   forearm: {fileID: 5960927923103955127}
   hand: {fileID: 5960927924521195273}
   elbow: {fileID: 5960927924338891755}
   target: {fileID: 5960927924141586560}
   TargetTarget: {fileID: 9077673147926503069}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &1216857394098560023
@@ -945,7 +955,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1779204766092312415}
-  m_LocalRotation: {x: -0.11990826, y: -0.46204132, z: 0.696866, w: 0.5352735}
+  m_LocalRotation: {x: -0.11990821, y: -0.4620413, z: 0.6968659, w: 0.53527355}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -979,7 +989,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1143,15 +1153,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 2157794644499337086}
   forearm: {fileID: 4577241475587289049}
   hand: {fileID: 6287394803451334496}
   elbow: {fileID: 2521109262779282228}
   target: {fileID: 2440513166791379066}
   TargetTarget: {fileID: 1582643068250823024}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &2628727187782230847
@@ -1540,15 +1555,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 4133279649112026550}
   forearm: {fileID: 8027473259814208755}
   hand: {fileID: 7389569333706856271}
   elbow: {fileID: 4742915178476571161}
   target: {fileID: 4310591065846051828}
   TargetTarget: {fileID: 7297851606704448354}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &3597551568754482899
@@ -1657,7 +1677,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3972192414339511428}
-  m_LocalRotation: {x: -0.11664158, y: 0.26558343, z: 0.032388356, w: 0.9564576}
+  m_LocalRotation: {x: -0.116641544, y: 0.26558343, z: 0.032388333, w: 0.9564576}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1693,7 +1713,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1775,7 +1795,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1836,7 +1856,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4073180019006026018}
-  m_LocalRotation: {x: 0.3771631, y: 0.37716308, z: -0.5981205, w: 0.59812033}
+  m_LocalRotation: {x: 0.37716305, y: 0.37716302, z: -0.5981205, w: 0.5981204}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1872,7 +1892,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2131,15 +2151,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 2656418525108220958}
   forearm: {fileID: 2764293477266163983}
   hand: {fileID: 509608326424773058}
   elbow: {fileID: 8691365853900148107}
   target: {fileID: 1575214294896488393}
   TargetTarget: {fileID: 3484950240559790452}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &4592666398517422286
@@ -2203,7 +2228,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2366,7 +2391,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2556,7 +2581,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2720,15 +2745,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetMaxDistance: 2
+  UpperArmLength: 2.5
+  LowerArmLength: 2.5
   uppperArm_OffsetRotation: {x: 0, y: 0, z: 0}
   forearm_OffsetRotation: {x: 0, y: 0, z: 0}
   hand_OffsetRotation: {x: 0, y: 0, z: 0}
+  VisualUpperArm: {fileID: 0}
+  VisualLowerArm: {fileID: 0}
   upperArm: {fileID: 8018234275183784243}
   forearm: {fileID: 7330244734792453630}
   hand: {fileID: 2856749922641683008}
   elbow: {fileID: 2596491841507820866}
   target: {fileID: 1948176597998767953}
   TargetTarget: {fileID: 8721281113286052737}
+  PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 0
 --- !u!1 &5960927923103955126
@@ -2757,7 +2787,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5960927923103955126}
-  m_LocalRotation: {x: 0.2817553, y: 0.2817554, z: -0.6485476, w: 0.64854753}
+  m_LocalRotation: {x: 0.28175527, y: 0.2817553, z: -0.64854753, w: 0.64854765}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2793,7 +2823,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2878,6 +2908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsMainController: 0
+  DisabledStillNormaliseBodyHeight: 0
   MoveSpeed: 24
   OvershootMultiplier: 6
   BetweenMoveDelay: 0.01
@@ -3279,7 +3310,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5960927924521195272}
-  m_LocalRotation: {x: -0.39787495, y: -0.07513702, z: 0.5845473, w: 0.7031034}
+  m_LocalRotation: {x: -0.3978749, y: -0.075136974, z: 0.5845472, w: 0.70310354}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3313,7 +3344,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3373,7 +3404,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5960927924641551203}
-  m_LocalRotation: {x: -0.056031704, y: -0.24271478, z: -0.014043853, w: 0.96837634}
+  m_LocalRotation: {x: -0.056031633, y: -0.24271478, z: -0.014043835, w: 0.9683764}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3409,7 +3440,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3492,7 +3523,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3574,7 +3605,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3751,7 +3782,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4201,7 +4232,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4298,7 +4329,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4476,7 +4507,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4653,7 +4684,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5263191c97567ec499ece35b8fff99cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

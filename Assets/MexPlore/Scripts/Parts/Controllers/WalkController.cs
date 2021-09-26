@@ -28,6 +28,7 @@ public class WalkController : BaseController
     public float OvershootMultiplier = 1;
     public float BetweenMoveDelay = 0.1f;
     public float BodyHeightOffset = 1;
+    public float BodyHeightNormaliseLerpSpeed = 1;
     public float LegLerpDuration = 1;
 
     [Header( "References" )]
@@ -84,6 +85,8 @@ public class WalkController : BaseController
                 pos.y = NormalisedHeight;
             Body.transform.position = pos;
             Body.GetComponent<Rigidbody>().MovePosition( pos );
+
+            NormaliseBodyPos();
         }
         else if ( DisabledStillNormaliseBodyHeight )
         {
@@ -115,7 +118,7 @@ public class WalkController : BaseController
                 positions++;
             }
         }
-        NormalisedHeight = ( pos / positions ).y + BodyHeightOffset;
+        NormalisedHeight = Mathf.Lerp( NormalisedHeight,( pos / positions ).y + BodyHeightOffset, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
     }
     #endregion
 
@@ -143,8 +146,6 @@ public class WalkController : BaseController
         {
             LegDatas[RIGHT][leg].Position = Legs[RIGHT].Legs[leg].position;
         }
-
-        NormaliseBodyPos();
     }
 
     public void TryMoveLeg( Transform leg, Vector3 pos )
@@ -155,7 +156,8 @@ public class WalkController : BaseController
         int side = GetLegSide( leg );
         int other = GetOtherSide( side );
         int location = GetLegIndex( leg );
-        bool canmove = !LegDatas[side][location].IsMoving && // Isn't already moving
+        bool canmove = IsMainController && // Is active!
+            !LegDatas[side][location].IsMoving && // Isn't already moving
             LegDatas[side][location].NextToMove && // Is next to move
             //( LegDatas[other][location].LastMoved + BetweenMoveDelay < Time.time );
             !LegDatas[other][location].IsMoving; // Other side leg isn't currently moving
@@ -225,8 +227,11 @@ public class WalkController : BaseController
         // Play footstep sound
         if ( SoundBankFootstep.Length > 0 )
         {
-            AudioSource.PlayClipAtPoint( SoundBankFootstep[UnityEngine.Random.Range( 0, SoundBankFootstep.Length )], pos );
+            StaticHelpers.GetOrCreateCachedAudioSource( SoundBankFootstep[UnityEngine.Random.Range( 0, SoundBankFootstep.Length )], pos );
         }
+
+        // Play particle effect
+        StaticHelpers.EmitParticleDust( pos );
     }
     #endregion
 
