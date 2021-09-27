@@ -390,10 +390,6 @@ PrefabInstance:
       propertyPath: Body
       value: 
       objectReference: {fileID: 3934595292728027363}
-    - target: {fileID: 227835507978711917, guid: 9aca25ac24f4cdb42973ff20e96a5501, type: 3}
-      propertyPath: BodyHeightNormaliseLerpSpeed
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 313491711018416312, guid: 9aca25ac24f4cdb42973ff20e96a5501, type: 3}
       propertyPath: m_Name
       value: MechLeg - Two

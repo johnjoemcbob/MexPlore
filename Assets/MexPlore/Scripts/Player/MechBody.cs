@@ -13,6 +13,8 @@ public class MechBody : MonoBehaviour
 	public float RotateVolumeMultiplier = 0.5f;
 	public bool TorsoLag = false;
 	public float TorsoLagSpeed = 1;
+	public float OfflineGroundHeight = 1;
+	public float PosLerpSpeed = 5;
 
 	[Header( "Base - References" )]
 	public Transform Torso;
@@ -20,6 +22,7 @@ public class MechBody : MonoBehaviour
 	[Header( "Base - Assets" )]
 	public AudioSource RotationSource;
 
+	private Vector3 TargetPos;
 	private Vector3 TargetDirection;
 	private Quaternion TorsoRotation;
 
@@ -29,36 +32,46 @@ public class MechBody : MonoBehaviour
 		{
 			TorsoRotation = Torso.rotation;
 		}
+		TargetPos = transform.position;
 	}
 
 	public virtual void Update()
 	{
-		if ( !IsMainController ) return;
-
-		if ( RotateTowardsTarget )
+		if ( IsMainController )
 		{
-			Quaternion target = Quaternion.LookRotation( TargetDirection, Vector3.up );
-			Quaternion start = transform.rotation;
-			transform.rotation = Quaternion.Lerp( transform.rotation, target, Time.deltaTime * RotateSpeed );
-			if ( TorsoLag )
+			if ( RotateTowardsTarget )
 			{
-				TorsoRotation = Quaternion.Lerp( TorsoRotation, target, Time.deltaTime * TorsoLagSpeed );
-				Torso.rotation = TorsoRotation;
-			}
-
-			float ang = Quaternion.Angle( transform.rotation, target );
-			if ( ang > RotateEpsilon )
-			{
-				if ( !RotationSource.isPlaying )
+				Quaternion target = Quaternion.LookRotation( TargetDirection, Vector3.up );
+				Quaternion start = transform.rotation;
+				transform.rotation = Quaternion.Lerp( transform.rotation, target, Time.deltaTime * RotateSpeed );
+				if ( TorsoLag )
 				{
-					RotationSource.Play();
+					TorsoRotation = Quaternion.Lerp( TorsoRotation, target, Time.deltaTime * TorsoLagSpeed );
+					Torso.rotation = TorsoRotation;
 				}
-				RotationSource.volume = Mathf.Min( ang * RotateVolumeMultiplier, MexPlore.GetVolume( MexPlore.SOUND.MECH_TURN ) );
+
+				float ang = Quaternion.Angle( transform.rotation, target );
+				if ( ang > RotateEpsilon )
+				{
+					if ( !RotationSource.isPlaying )
+					{
+						RotationSource.Play();
+					}
+					RotationSource.volume = Mathf.Min( ang * RotateVolumeMultiplier, MexPlore.GetVolume( MexPlore.SOUND.MECH_TURN ) );
+				}
+				else
+				{
+					RotationSource.Pause();
+				}
 			}
-			else
-			{
-				RotationSource.Pause();
-			}
+		}
+
+		// Always lerp to target pos
+		if ( GetComponent<Rigidbody>().isKinematic )
+		{
+			//float dist = Mathf.Max( 1, Vector3.Distance( transform.position, TargetPos ) );
+			//transform.position = Vector3.Lerp( transform.position, TargetPos, Time.deltaTime * PosLerpSpeed * dist );
+			transform.position = TargetPos;
 		}
 	}
 
@@ -70,8 +83,24 @@ public class MechBody : MonoBehaviour
 		}
 	}
 
+	public void SetTargetPos( Vector3 pos )
+	{
+		TargetPos = pos;
+	}
+
 	public void SetTargetDirection( Vector3 dir )
 	{
 		TargetDirection = dir;
+	}
+
+	public void OnDock()
+	{
+
+	}
+
+	public void OnUnDock()
+	{
+		Vector3 ground = MexPlore.RaycastToGround( transform.position );
+		TargetPos = ground + Vector3.up * OfflineGroundHeight;
 	}
 }

@@ -40,9 +40,9 @@ public static class MexPlore
 
         Volume[(int) SOUND.MECH_TURN] = 0.2f;
         Volume[(int) SOUND.MECH_LEG_RAISE] = 0.15f;
-        Pitch[(int) SOUND.MECH_LEG_RAISE] = new Vector3( 0.95f, 1.05f, 0.05f );
+        Pitch[(int) SOUND.MECH_LEG_RAISE] = new Vector3( 1, 1, 0 );
         Volume[(int) SOUND.MECH_LEG_LOWER] = 0.15f;
-        Pitch[(int) SOUND.MECH_LEG_LOWER] = new Vector3( 0.95f, 1.05f, 0.05f );
+        Pitch[(int) SOUND.MECH_LEG_LOWER] = new Vector3( 1, 1, 0 );
         Volume[(int) SOUND.MECH_FOOTSTEP] = 0.5f;
         Pitch[(int) SOUND.MECH_FOOTSTEP] = new Vector3( 0.8f, 1.2f, 0.2f );
 

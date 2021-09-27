@@ -49,7 +49,7 @@ public class CrawlController : BaseController
         if ( Input.GetButton( "Jump" ) )
         {
             // Freeze the hand, instead move the body towards the distance
-            Body.transform.position = FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude );
+            Body.GetComponent<MechBody>().SetTargetPos( FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude ) );
             //Body.GetComponent<Rigidbody>().MovePosition( FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude ) );
             HandTarget.transform.position = FreezePos + ( FreezeHandPos - Body.transform.position ) * ( dir.magnitude ) / 2;
         }

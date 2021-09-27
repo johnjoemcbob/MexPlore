@@ -32,7 +32,7 @@ public class BallWheelController : BaseController
 
         // Lean body towards forward dir based on camera
         CurrentBodyHeight = Mathf.Lerp( CurrentBodyHeight, BodyHeightOffset, Time.deltaTime * 5 );
-        Body.transform.position = FootPos + Vector3.up * ( CurrentBodyHeight - ( dir.magnitude ) * LeanHeightMultipier ) + dir * LeanMax;
+        Body.GetComponent<MechBody>().SetTargetPos( FootPos + Vector3.up * ( CurrentBodyHeight - ( dir.magnitude ) * LeanHeightMultipier ) + dir * LeanMax );
         Foot.position = FootPos;
         if ( dir.magnitude != 0 )
         {

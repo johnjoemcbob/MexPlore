@@ -56,6 +56,7 @@ public class MechCockpitDock : MonoBehaviour
 
 		// Callbacks
 		Cockpit.GetComponent<HeliCockpit>().OnDock();
+		GetComponentInParent<MechBody>().OnDock();
 		foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
 		{
 			engine.OnDock();
@@ -92,6 +93,7 @@ public class MechCockpitDock : MonoBehaviour
 
 				// Callbacks
 				Cockpit.GetComponent<HeliCockpit>().OnUnDock();
+				GetComponentInParent<MechBody>().OnUnDock();
 				foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
 				{
 					engine.OnUnDock();

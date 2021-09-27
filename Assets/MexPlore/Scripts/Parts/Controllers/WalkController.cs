@@ -83,8 +83,7 @@ public class WalkController : BaseController
             LastDirection = dir;
             Vector3 pos = Body.transform.position + dir * MoveSpeed * Time.deltaTime;
                 pos.y = NormalisedHeight;
-            Body.transform.position = pos;
-            Body.GetComponent<Rigidbody>().MovePosition( pos );
+            Body.GetComponent<MechBody>().SetTargetPos( pos );
 
             NormaliseBodyPos();
         }
@@ -93,7 +92,7 @@ public class WalkController : BaseController
             // If not in control, still normalise body height relative to feet
             Vector3 pos = Body.transform.position;
                 pos.y = NormalisedHeight;
-            Body.transform.position = pos;
+            Body.GetComponent<MechBody>().SetTargetPos( pos );
         }
 
         UpdateLegs();
@@ -121,6 +120,12 @@ public class WalkController : BaseController
         float target = ( pos / positions ).y + BodyHeightOffset;
         float dist = Mathf.Abs( target - NormalisedHeight );
         NormalisedHeight = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed * dist );
+
+        // Clamp to height of mech from ground
+        Vector3 ground = MexPlore.RaycastToGround( Body.transform.position );
+        // Ground is min, ground+height max
+        float bodyheight = 10;
+        NormalisedHeight = Mathf.Clamp( NormalisedHeight, ground.y, ground.y + bodyheight );
     }
     #endregion
 
