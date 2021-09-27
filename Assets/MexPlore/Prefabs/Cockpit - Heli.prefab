@@ -630,11 +630,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3902aa29142f00a498444813099326b4, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: acfd416389cb6c147ba0e9d673c61125, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Name
       value: corridor_roof (1)
@@ -712,11 +712,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 7d7dc651596e60d43ae6b7ad0159c13e, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 8df2fed6f32e0d545856ed71c9e28239, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Name
       value: corridor_roof
@@ -794,19 +794,19 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: eae6a63de983b1947b47c1cc09cf8418, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6424019cb90eb7341b5c6c4dd6248e27, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: eae6a63de983b1947b47c1cc09cf8418, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 6424019cb90eb7341b5c6c4dd6248e27, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: -7511558181221131132, guid: eae6a63de983b1947b47c1cc09cf8418, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 463a1b2931bf40c408cfced1c10f76eb, type: 2}
+      objectReference: {fileID: 2100000, guid: 7538d148721d3a64993453f8e1032efe, type: 2}
     - target: {fileID: -7511558181221131132, guid: eae6a63de983b1947b47c1cc09cf8418, type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: be90b809a743c324e8f69cbf44e90d45, type: 2}
+      objectReference: {fileID: 2100000, guid: 222f21bcb827c4d42bc276e958d5440d, type: 2}
     - target: {fileID: 919132149155446097, guid: eae6a63de983b1947b47c1cc09cf8418, type: 3}
       propertyPath: m_Name
       value: craft_cargoB
@@ -946,11 +946,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3902aa29142f00a498444813099326b4, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: acfd416389cb6c147ba0e9d673c61125, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Name
       value: corridor_roof (1)
@@ -1016,15 +1016,15 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: d759244602a058f419c583e6d22a8449, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 035d9ae1d5e44ff479fbec8e298ac9c2, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: d759244602a058f419c583e6d22a8449, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 64240da5d9201024fa7f5e42c5063bdb, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: -7511558181221131132, guid: d759244602a058f419c583e6d22a8449, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 9beab3517d520d9438b792dd25542fc4, type: 2}
+      objectReference: {fileID: 2100000, guid: 7538d148721d3a64993453f8e1032efe, type: 2}
     - target: {fileID: 919132149155446097, guid: d759244602a058f419c583e6d22a8449, type: 3}
       propertyPath: m_Name
       value: chimney_detailed
@@ -1102,11 +1102,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 7d7dc651596e60d43ae6b7ad0159c13e, type: 2}
+      objectReference: {fileID: 2100000, guid: 5654cd281ad48e9469700e8ae868a1d9, type: 2}
     - target: {fileID: -7511558181221131132, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 8df2fed6f32e0d545856ed71c9e28239, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c75dae5867706b4eb83c86aef22c09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 2a04bd3964da414409bd715894a669f3, type: 3}
       propertyPath: m_Name
       value: corridor_roof

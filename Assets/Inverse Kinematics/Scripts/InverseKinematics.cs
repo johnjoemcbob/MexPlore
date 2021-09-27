@@ -50,7 +50,7 @@ public class InverseKinematics : MonoBehaviour
 		if ( TargetTarget != null && PhysicsEnabled )
 		{
 			float dist = ( target.position - TargetTarget.position ).sqrMagnitude;
-			if ( dist > TargetMaxDistance )
+			if ( dist > TargetMaxDistance && GetComponentInParent<WalkController>() != null )
 			{
 				GetComponentInParent<WalkController>().TryMoveLeg( target, TargetTarget.position );
 			}
