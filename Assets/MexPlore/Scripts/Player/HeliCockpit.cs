@@ -8,8 +8,10 @@ public class HeliCockpit : MonoBehaviour
     public float RotorLerpSpeed = 5;
     public float RotorLookMultiplier = 0.5f;
     public float RotorLookY = -0.5f;
+    public float RotorVelocityLookMultiplier = 0.2f;
     public float BladeLerpSpeed = 1;
     public float BladeMaxSpeed = 1;
+    public float BladeVelocitySpeedMultiplier = 0.5f;
     public float BladeVisualSpeedMultiplier = 1;
     public float BladeVisualOffsetMultiplier = 1;
     public float BladeMaxForce = 5;
@@ -19,10 +21,15 @@ public class HeliCockpit : MonoBehaviour
     public Transform Rotor;
     public Transform[] Blades;
 
+    [Header( "Assets" )]
+    public AudioClip SoundDock;
+    public AudioClip SoundUnDock;
+
     private Vector3 LastDirection = Vector3.zero;
     private float CurrentBladeSpeed = 0;
+    private float CurrentVisualBladeSpeed = 0;
 
-	private void Start()
+    private void Start()
 	{
         AddRigidbody();
 	}
@@ -32,35 +39,89 @@ public class HeliCockpit : MonoBehaviour
         // Get input
         bool thrust = Input.GetButton( "Jump" );
         Vector3 dir = MexPlore.GetCameraDirectionalInput().normalized;
+        Vector3 vel = GetComponent<Rigidbody>().velocity;
         if ( dir != Vector3.zero )
 		{
             //dir = LastDirection;
+            LastDirection = dir;
             dir = dir * RotorLookMultiplier + new Vector3( 0, RotorLookY, 0 );
         }
-        //LastDirection = dir;
-
+        else
+		{
+            dir = LastDirection * RotorLookMultiplier;
+            dir.y = vel.y * RotorVelocityLookMultiplier;
+        }
+ 
         // Turn rotor
         Quaternion target = Quaternion.LookRotation( dir, Vector3.up );
         Rotor.rotation = Quaternion.Lerp( Rotor.rotation, target, Time.deltaTime * RotorLerpSpeed );
 
         // Add blade spin speed with input
         float targetspeed = 0;
+        float visualtargetspeed = 0;
         if ( thrust )
 		{
             targetspeed = BladeMaxSpeed;
-		}
+            visualtargetspeed = BladeMaxSpeed;
+        }
+        else
+		{
+            visualtargetspeed = vel.magnitude * BladeVelocitySpeedMultiplier;
+        }
         CurrentBladeSpeed = Mathf.Lerp( CurrentBladeSpeed, targetspeed, Time.deltaTime * BladeLerpSpeed );
+        CurrentVisualBladeSpeed = Mathf.Lerp( CurrentVisualBladeSpeed, visualtargetspeed, Time.deltaTime * BladeLerpSpeed );
+
+        // Blades audio
+        float maxvol = MexPlore.GetVolume( MexPlore.SOUND.HELI_BLADES );
+        GetComponent<AudioSource>().volume = Mathf.Clamp( CurrentVisualBladeSpeed / BladeMaxSpeed * maxvol, 0, maxvol );
 
         // Spin blades by speed
         int i = 0;
 		foreach ( var blade in Blades )
 		{
-            blade.localEulerAngles += new Vector3( 0, 0, 1 ) * Time.deltaTime * CurrentBladeSpeed * BladeVisualSpeedMultiplier * ( ( i + 1 ) * BladeVisualOffsetMultiplier );
+            blade.localEulerAngles += new Vector3( 0, 0, 1 ) * Time.deltaTime * CurrentVisualBladeSpeed * BladeVisualSpeedMultiplier * ( ( i + 1 ) * BladeVisualOffsetMultiplier );
             i++;
 		}
 
         // Apply force towards rotor direction * space bar
         GetComponent<Rigidbody>().AddForce( Rotor.up * CurrentBladeSpeed * BladeMaxForce + Vector3.up * CurrentBladeSpeed * BladeUpwardForce, ForceMode.Acceleration );
+
+        // Update particles
+        var part = GetComponentInChildren<ParticleSystem>();
+        {
+            // Pos
+            RaycastHit hit = MexPlore.RaycastToGroundHit( transform.position );
+            float maxdist = 3;
+            float dist = maxdist;
+            if ( hit.collider != null )
+            {
+                dist = Vector3.Distance( hit.point, transform.position );
+                part.transform.position = hit.point;
+            }
+
+            // Scale
+            float scale = Mathf.Clamp( ( CurrentVisualBladeSpeed / BladeMaxSpeed ) * ( 1 - ( dist / maxdist ) ), 0, 1 );
+            float min = 1.6f;
+            float max = 2.4f;
+            if ( scale < 0.05f )
+            {
+                var emission = part.emission;
+                {
+                    emission.enabled = false;
+                }
+            }
+            else
+            {
+                var main = part.main;
+                {
+                    main.startSize = new ParticleSystem.MinMaxCurve( min * scale, max * scale );
+                }
+                var emission = part.emission;
+                {
+                    emission.enabled = true;
+                }
+            }
+        }
     }
 
     public void AddRigidbody()
@@ -74,5 +135,18 @@ public class HeliCockpit : MonoBehaviour
             body.isKinematic = false;
             body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
+    }
+
+    public void OnDock()
+	{
+        Rotor.transform.localEulerAngles = new Vector3( 0, -90, 0 );
+        GetComponent<AudioSource>().volume = 0;
+
+        StaticHelpers.GetOrCreateCachedAudioSource( SoundDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_DOCK ) );
+    }
+
+    public void OnUnDock()
+    {
+        StaticHelpers.GetOrCreateCachedAudioSource( SoundUnDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_UNDOCK ) );
     }
 }

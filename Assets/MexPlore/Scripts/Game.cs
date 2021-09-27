@@ -11,6 +11,8 @@ public class Game : MonoBehaviour
     {
         Instance = this;
         RuntimeParent = transform;
+
+        MexPlore.InitVolumes();
     }
 
     void Start()

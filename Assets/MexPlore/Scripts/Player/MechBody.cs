@@ -11,7 +11,6 @@ public class MechBody : MonoBehaviour
 	public float RotateSpeed = 5;
 	public float RotateEpsilon = 0.5f;
 	public float RotateVolumeMultiplier = 0.5f;
-	public float RotateVolumeMax = 0.5f;
 	public bool TorsoLag = false;
 	public float TorsoLagSpeed = 1;
 
@@ -54,7 +53,7 @@ public class MechBody : MonoBehaviour
 				{
 					RotationSource.Play();
 				}
-				RotationSource.volume = Mathf.Min( ang * RotateVolumeMultiplier, RotateVolumeMax );
+				RotationSource.volume = Mathf.Min( ang * RotateVolumeMultiplier, MexPlore.GetVolume( MexPlore.SOUND.MECH_TURN ) );
 			}
 			else
 			{

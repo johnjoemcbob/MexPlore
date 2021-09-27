@@ -118,7 +118,9 @@ public class WalkController : BaseController
                 positions++;
             }
         }
-        NormalisedHeight = Mathf.Lerp( NormalisedHeight,( pos / positions ).y + BodyHeightOffset, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+        float target = ( pos / positions ).y + BodyHeightOffset;
+        float dist = Mathf.Abs( target - NormalisedHeight );
+        NormalisedHeight = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed * dist );
     }
     #endregion
 
@@ -178,10 +180,8 @@ public class WalkController : BaseController
     IEnumerator MoveLeg( int side, int location, Vector3 pos )
     {
         // Play leg raise sound
-        if ( SoundBankLegRaise.Length > 0 )
-        {
-            AudioSource.PlayClipAtPoint( SoundBankLegRaise[UnityEngine.Random.Range( 0, SoundBankLegRaise.Length )], Legs[side].Legs[location].position );
-        }
+        TryPlaySound( SoundBankLegRaise, Legs[side].Legs[location].position, side, MexPlore.SOUND.MECH_LEG_RAISE );
+
         bool lowered = false;
 
         LegDatas[side][location].IsMoving = true;
@@ -207,10 +207,7 @@ public class WalkController : BaseController
                     // Play leg raise sound
                     if ( !lowered )
                     {
-                        if ( SoundBankLegLower.Length > 0 )
-                        {
-                            AudioSource.PlayClipAtPoint( SoundBankLegLower[UnityEngine.Random.Range( 0, SoundBankLegLower.Length )], Legs[side].Legs[location].position );
-                        }
+                        TryPlaySound( SoundBankLegLower, Legs[side].Legs[location].position, side, MexPlore.SOUND.MECH_LEG_LOWER );
                         lowered = true;
                     }
                 }
@@ -225,13 +222,24 @@ public class WalkController : BaseController
         LegDatas[side][location].IsMoving = false;
 
         // Play footstep sound
-        if ( SoundBankFootstep.Length > 0 )
-        {
-            StaticHelpers.GetOrCreateCachedAudioSource( SoundBankFootstep[UnityEngine.Random.Range( 0, SoundBankFootstep.Length )], pos );
-        }
+        TryPlaySound( SoundBankFootstep, pos, side, MexPlore.SOUND.MECH_FOOTSTEP );
 
         // Play particle effect
         StaticHelpers.EmitParticleDust( pos );
+    }
+
+    float GetLegPitch( MexPlore.SOUND sound, int side )
+	{
+        Vector3 range = MexPlore.GetPitchRange( sound );
+        return UnityEngine.Random.Range( range.x, range.y ) + ( side + 1 ) * range.z;
+    }
+
+    void TryPlaySound( AudioClip[] bank, Vector3 pos, int side, MexPlore.SOUND sound )
+	{
+        if ( bank.Length > 0 )
+        {
+            StaticHelpers.GetOrCreateCachedAudioSource( bank[UnityEngine.Random.Range( 0, bank.Length )], pos, GetLegPitch( sound, side ), MexPlore.GetVolume( sound ) );
+        }
     }
     #endregion
 

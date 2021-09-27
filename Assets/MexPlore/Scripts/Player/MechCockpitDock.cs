@@ -54,6 +54,13 @@ public class MechCockpitDock : MonoBehaviour
 		Cockpit.transform.localPosition = Vector3.zero;
 		Cockpit.transform.localEulerAngles = Vector3.zero;
 
+		// Callbacks
+		Cockpit.GetComponent<HeliCockpit>().OnDock();
+		foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
+		{
+			engine.OnDock();
+		}
+
 		// Remove rigidbody
 		Destroy( Cockpit.GetComponent<Rigidbody>() );
 
@@ -82,6 +89,13 @@ public class MechCockpitDock : MonoBehaviour
 
 				// Add rigidbody
 				Cockpit.AddRigidbody();
+
+				// Callbacks
+				Cockpit.GetComponent<HeliCockpit>().OnUnDock();
+				foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
+				{
+					engine.OnUnDock();
+				}
 
 				// Visuals
 				GetComponent<MeshRenderer>().enabled = true;
