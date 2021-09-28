@@ -10,6 +10,7 @@ public class InverseKinematics : MonoBehaviour
 	public float TargetMaxDistance = 10;
 	public float UpperArmLength = 2.5f;
 	public float LowerArmLength = 2.5f;
+	public float TargetTargetLerpSpeed = 1;
 
 	[Header( "Offsets" )]
 	public Vector3 uppperArm_OffsetRotation;
@@ -53,6 +54,10 @@ public class InverseKinematics : MonoBehaviour
 			if ( dist > TargetMaxDistance && GetComponentInParent<WalkController>() != null )
 			{
 				GetComponentInParent<WalkController>().TryMoveLeg( target, TargetTarget.position );
+			}
+			else
+			{
+				target.position = Vector3.Lerp( target.position, TargetTarget.position, Time.deltaTime * TargetTargetLerpSpeed );
 			}
 		}
 

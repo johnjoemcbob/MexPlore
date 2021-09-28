@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MexPlore/Scenes/menu.unity
+    guid: 914b0825c2e44e6498372c46a4376cd8
+  - enabled: 1
+    path: Assets/MexPlore/Scenes/main.unity
+    guid: 90d81cfa80eac8e47bd5114e5e486526
   m_configObjects: {}

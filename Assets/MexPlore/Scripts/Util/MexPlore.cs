@@ -4,7 +4,8 @@ using UnityEngine;
 
 public static class MexPlore
 {
-    public enum SOUND
+	#region Static - SOUND
+	public enum SOUND
     {
         HELI_BLADES,
         HELI_DOCK,
@@ -18,6 +19,7 @@ public static class MexPlore
         ENGINE_ON,
         ENGINE_LOOP,
         ENGINE_OFF,
+        ENGINE_FUEL_CONSUME,
 
         COUNT,
     }
@@ -26,13 +28,13 @@ public static class MexPlore
     public static Vector3[] Pitch;
 
     public static void InitVolumes()
-	{
+    {
         Volume = new float[(int) SOUND.COUNT];
         Pitch = new Vector3[(int) SOUND.COUNT];
-		for ( int i = 0; i < Pitch.Length; i++ )
-		{
+        for ( int i = 0; i < Pitch.Length; i++ )
+        {
             Pitch[i] = new Vector3( 1, 1, 0 );
-		}
+        }
 
         Volume[(int) SOUND.HELI_BLADES] = 0.5f;
         Volume[(int) SOUND.HELI_DOCK] = 0.5f;
@@ -49,18 +51,74 @@ public static class MexPlore
         Volume[(int) SOUND.ENGINE_ON] = 0.3f;
         Volume[(int) SOUND.ENGINE_LOOP] = 0.2f;
         Volume[(int) SOUND.ENGINE_OFF] = 0.3f;
+        Volume[(int) SOUND.ENGINE_FUEL_CONSUME] = 1;
     }
 
     public static float GetVolume( SOUND sound )
-	{
+    {
         return Volume[(int) sound];
-	}
+    }
 
     public static Vector3 GetPitchRange( SOUND sound )
-	{
+    {
         return Pitch[(int) sound];
-	}
+    }
+	#endregion
 
+	#region Static - CONTROL
+	public enum CONTROL
+    {
+        AXIS_FORWARD,
+        AXIS_RIGHT,
+
+        BUTTON_HELI_THRUST,
+        BUTTON_HELI_UNDOCK,
+
+        BUTTON_ARM_LEFT,
+        BUTTON_ARM_RIGHT,
+
+        BUTTON_MECH_UP,
+        BUTTON_MECH_DOWN,
+        BUTTON_MECH_FOLD,
+        BUTTON_MECH_JUMP,
+
+        BUTTON_BRIDGE_EXTEND,
+        BUTTON_CRAWL_CLAMP,
+
+        COUNT,
+    }
+
+    public static string[] Control;
+
+    public static void InitControls()
+    {
+        Control = new string[(int) CONTROL.COUNT];
+
+        Control[(int) CONTROL.AXIS_FORWARD] = "Vertical";
+        Control[(int) CONTROL.AXIS_RIGHT] = "Horizontal";
+
+        Control[(int) CONTROL.BUTTON_HELI_THRUST] = "Jump";
+        Control[(int) CONTROL.BUTTON_HELI_UNDOCK] = "Fire3";
+
+        Control[(int) CONTROL.BUTTON_ARM_LEFT] = "Fire1";
+        Control[(int) CONTROL.BUTTON_ARM_RIGHT] = "Fire2";
+
+        Control[(int) CONTROL.BUTTON_MECH_UP] = "";
+        Control[(int) CONTROL.BUTTON_MECH_DOWN] = "";
+        Control[(int) CONTROL.BUTTON_MECH_FOLD] = "Jump";
+        Control[(int) CONTROL.BUTTON_MECH_JUMP] = "Jump";
+
+        Control[(int) CONTROL.BUTTON_BRIDGE_EXTEND] = "Jump";
+        Control[(int) CONTROL.BUTTON_CRAWL_CLAMP] = "Jump";
+    }
+
+    public static string GetControl( CONTROL control )
+    {
+        return Control[(int) control];
+    }
+    #endregion
+
+    #region Static - Gameplay Functions
     public static Vector3 GetCameraDirectionalInput()
     {
         // Camera
@@ -70,8 +128,8 @@ public static class MexPlore
         right.y = 0;
 
         // Input
-        var hor = Input.GetAxis( "Horizontal" );
-        var ver = Input.GetAxis( "Vertical" );
+        var hor = Input.GetAxis( GetControl( CONTROL.AXIS_RIGHT ) );
+        var ver = Input.GetAxis( GetControl( CONTROL.AXIS_FORWARD ) );
 
         // Together
         Vector3 dir = forward * ver + right * hor;
@@ -114,4 +172,5 @@ public static class MexPlore
         Physics.Raycast( start, raydir, out hit, updist + raydist, mask );
         return hit;
     }
+	#endregion
 }

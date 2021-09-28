@@ -14,6 +14,7 @@ public class Engine : MonoBehaviour
     public AudioClip SoundEngineOn;
     public AudioClip SoundEngineLoop;
     public AudioClip SoundEngineOff;
+    public AudioClip SoundFuelConsume;
 
     private AudioSource Source;
 
@@ -61,6 +62,15 @@ public class Engine : MonoBehaviour
 
         ShakePivot.transform.localPosition = Vector3.zero;
         ToggleParticles( false );
+    }
+
+    public void OnFuelConsume()
+	{
+        StaticHelpers.GetOrCreateCachedAudioSource( SoundFuelConsume, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.ENGINE_FUEL_CONSUME ) );
+		foreach ( var particle in GetComponentsInChildren<ParticleSystem>() )
+		{
+            StaticHelpers.GetOrCreateCachedPrefab( "Particle Smoke OneShot", particle.transform.position, particle.transform.rotation, particle.transform.localScale );
+        }
     }
 
     void ToggleParticles( bool toggle )

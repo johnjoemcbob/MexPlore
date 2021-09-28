@@ -28,26 +28,36 @@ public class HeliCockpit : MonoBehaviour
     private Vector3 LastDirection = Vector3.zero;
     private float CurrentBladeSpeed = 0;
     private float CurrentVisualBladeSpeed = 0;
+    private ParticleSystem Particles;
 
     private void Start()
 	{
         AddRigidbody();
-	}
+
+        Particles = GetComponentInChildren<ParticleSystem>();
+    }
 
 	void FixedUpdate()
     {
+        bool islocal = LocalPlayer.Instance.Player == GetComponent<Player>();
+
         // Get input
-        bool thrust = Input.GetButton( "Jump" );
-        Vector3 dir = MexPlore.GetCameraDirectionalInput().normalized;
+        bool thrust = false;
+        Vector3 dir = Vector3.zero;
+            if ( islocal )
+            {
+                thrust = Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_THRUST ) );
+                dir = MexPlore.GetCameraDirectionalInput().normalized;
+            }
         Vector3 vel = GetComponent<Rigidbody>().velocity;
         if ( dir != Vector3.zero )
-		{
+        {
             //dir = LastDirection;
             LastDirection = dir;
             dir = dir * RotorLookMultiplier + new Vector3( 0, RotorLookY, 0 );
         }
         else
-		{
+        {
             dir = LastDirection * RotorLookMultiplier;
             dir.y = vel.y * RotorVelocityLookMultiplier;
         }
@@ -84,10 +94,13 @@ public class HeliCockpit : MonoBehaviour
 		}
 
         // Apply force towards rotor direction * space bar
-        GetComponent<Rigidbody>().AddForce( Rotor.up * CurrentBladeSpeed * BladeMaxForce + Vector3.up * CurrentBladeSpeed * BladeUpwardForce, ForceMode.Acceleration );
+        if ( islocal )
+        {
+            GetComponent<Rigidbody>().AddForce( Rotor.up * CurrentBladeSpeed * BladeMaxForce + Vector3.up * CurrentBladeSpeed * BladeUpwardForce, ForceMode.Acceleration );
+        }
 
         // Update particles
-        var part = GetComponentInChildren<ParticleSystem>();
+        var part = Particles;
         {
             // Pos
             RaycastHit hit = MexPlore.RaycastToGroundHit( transform.position );
@@ -141,12 +154,15 @@ public class HeliCockpit : MonoBehaviour
 	{
         Rotor.transform.localEulerAngles = new Vector3( 0, -90, 0 );
         GetComponent<AudioSource>().volume = 0;
+        Particles.gameObject.SetActive( false );
 
         StaticHelpers.GetOrCreateCachedAudioSource( SoundDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_DOCK ) );
     }
 
     public void OnUnDock()
     {
+        Particles.gameObject.SetActive( true );
+
         StaticHelpers.GetOrCreateCachedAudioSource( SoundUnDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_UNDOCK ) );
     }
 }

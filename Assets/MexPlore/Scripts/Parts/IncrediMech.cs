@@ -29,7 +29,7 @@ public class IncrediMech : MechBody
 		if ( !IsMainController ) return;
 
 		// Toggle button
-		if ( Input.GetButtonDown( "Jump" ) )
+		if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_MECH_FOLD ) ) )
 		{
 			ToggleState();
 		}
@@ -88,5 +88,16 @@ public class IncrediMech : MechBody
 				ik.LowerArmLength = StartLowerArmLength;
 			}
 		}
+	}
+
+	public void SetWalkerState( bool toggle )
+	{
+		WalkerState = !toggle;
+		ToggleState();
+	}
+
+	public bool GetWalkerState()
+	{
+		return WalkerState;
 	}
 }

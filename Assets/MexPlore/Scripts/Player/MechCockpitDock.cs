@@ -6,6 +6,7 @@ public class MechCockpitDock : MonoBehaviour
 {
 	public static MechCockpitDock CurrentInUse;
 
+	public bool CanDock = true;
 	public bool CanUnDock = true;
 	public float DockCooldown = 0.25f;
 
@@ -14,16 +15,22 @@ public class MechCockpitDock : MonoBehaviour
 
 	private void Update()
 	{
-		if ( Input.GetButton( "Fire2" ) )
+		if ( Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_UNDOCK ) ) )
 		{
-			UnDock();
+			if ( Cockpit != null && LocalPlayer.Instance.Player == Cockpit.GetComponent<Player>() )
+			{
+				if ( CanUnDock )
+				{
+					UnDock();
+				}
+			}
 		}
 	}
 
 	private void OnTriggerEnter( Collider other )
 	{
 		var cockpit = other.GetComponentInParent<HeliCockpit>();
-		if ( cockpit != null && cockpit.enabled )
+		if ( cockpit != null && cockpit.enabled && CanDock && LocalPlayer.Instance.Player == cockpit.GetComponent<Player>() )
 		{
 			if ( CurrentDockCooldown < Time.time )
 			{
@@ -48,6 +55,7 @@ public class MechCockpitDock : MonoBehaviour
 		Cockpit = cockpit;
 
 		// Stop the heli + dock
+		CanDock = false;
 		Cockpit.enabled = false;
 		Cockpit.GetComponent<Rigidbody>().isKinematic = true;
 		Cockpit.transform.SetParent( transform );
@@ -62,60 +70,72 @@ public class MechCockpitDock : MonoBehaviour
 			engine.OnDock();
 		}
 
+		// Network
+		Cockpit.GetComponent<Player>().Dock( this );
+
 		// Remove rigidbody
 		Destroy( Cockpit.GetComponent<Rigidbody>() );
 
 		// Visuals
-		GetComponent<MeshRenderer>().enabled = false;
-		// TODO fold the heli blades
+		GetComponentInChildren<MeshRenderer>().enabled = false;
 
 		// Enable mech controls
-		GetComponentInParent<MechBody>().IsMainController = true;
-		foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
+		if ( LocalPlayer.Instance.Player == Cockpit.GetComponent<Player>() )
 		{
-			controller.IsMainController = true;
+			GetComponentInParent<MechBody>().IsMainController = true;
+			foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
+			{
+				controller.IsMainController = true;
+			}
 		}
 	}
 
-	public void UnDock()
+	public void UnDock( bool destroy = false )
 	{
-		if ( Cockpit != null )
+		if ( Cockpit == null ) return; // Might be null if joined late and error?
+
+		// Undock + start the heli
+		if ( !destroy )
 		{
-			if ( CanUnDock )
-			{
-				// Undock + start the heli
-				Cockpit.transform.SetParent( null );
-				Cockpit.enabled = true;
-				CurrentDockCooldown = Time.time + DockCooldown;
-
-				// Add rigidbody
-				Cockpit.AddRigidbody();
-
-				// Callbacks
-				Cockpit.GetComponent<HeliCockpit>().OnUnDock();
-				GetComponentInParent<MechBody>().OnUnDock();
-				foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
-				{
-					engine.OnUnDock();
-				}
-
-				// Visuals
-				GetComponent<MeshRenderer>().enabled = true;
-				// TODO unfold the heli blades
-
-				// Disable mech controls
-				GetComponentInParent<MechBody>().IsMainController = false;
-				foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
-				{
-					controller.IsMainController = false;
-				}
-
-				Cockpit = null;
-			}
-			else
-			{
-				// TODO meepmerp error noise here
-			}
+			Cockpit.transform.SetParent( null );
+			Cockpit.enabled = true;
 		}
+		CanDock = true;
+		CurrentDockCooldown = Time.time + DockCooldown;
+
+		// Add rigidbody
+		if ( !destroy )
+		{
+			Cockpit.AddRigidbody();
+		}
+
+		// Callbacks
+		if ( !destroy )
+		{
+			Cockpit.GetComponent<HeliCockpit>().OnUnDock();
+		}
+		GetComponentInParent<MechBody>().OnUnDock();
+		foreach ( var engine in GetComponentInParent<MechBody>().GetComponentsInChildren<Engine>() )
+		{
+			engine.OnUnDock();
+		}
+
+		// Network
+		if ( !destroy )
+		{
+			Cockpit.GetComponent<Player>().UnDock( this );
+		}
+
+		// Visuals
+		GetComponentInChildren<MeshRenderer>().enabled = true;
+
+		// Disable mech controls
+		GetComponentInParent<MechBody>().IsMainController = false;
+		foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
+		{
+			controller.IsMainController = false;
+		}
+
+		Cockpit = null;
 	}
 }

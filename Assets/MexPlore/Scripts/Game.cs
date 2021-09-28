@@ -13,6 +13,7 @@ public class Game : MonoBehaviour
         RuntimeParent = transform;
 
         MexPlore.InitVolumes();
+        MexPlore.InitControls();
     }
 
     void Start()

@@ -19,11 +19,11 @@ public class BridgeExtender : MonoBehaviour
         var body = GetComponentInParent<MechBody>();
         if ( body.IsMainController )
 		{
-            bool extend = Input.GetButton( "Jump" ) || Extension > 0.1f;
+            bool extend = Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_BRIDGE_EXTEND ) ) || Extension > 0.1f;
             body.GetComponentInChildren<WalkController>().IsMainController = !extend; // Don't move while extending/retracting bridge
             if ( extend )
 			{
-                float forward = Input.GetAxis( "Vertical" );
+                float forward = Input.GetAxis( MexPlore.GetControl( MexPlore.CONTROL.AXIS_FORWARD ) );
                 Extension = Mathf.Clamp( Extension + forward * Time.deltaTime * ExtensionInputSpeed, 0, 1 );
 			}
 		}

@@ -7,7 +7,7 @@ public class OrbitCamera : MonoBehaviour
 	public static OrbitCamera Instance;
 
 	[SerializeField]
-	Transform focus = default;
+	public Transform focus = default;
 
 	public float ScrollSpeed = 5;
 

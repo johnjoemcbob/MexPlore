@@ -163,7 +163,8 @@ public class WalkController : BaseController
         int side = GetLegSide( leg );
         int other = GetOtherSide( side );
         int location = GetLegIndex( leg );
-        bool canmove = IsMainController && // Is active!
+        bool canmove = 
+            //IsMainController && // Is active!
             !LegDatas[side][location].IsMoving && // Isn't already moving
             LegDatas[side][location].NextToMove && // Is next to move
             //( LegDatas[other][location].LastMoved + BetweenMoveDelay < Time.time );
