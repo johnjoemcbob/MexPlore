@@ -28,6 +28,7 @@ public class WalkController : BaseController
     public float OvershootMultiplier = 1;
     public float BetweenMoveDelay = 0.1f;
     public float BodyHeightOffset = 1;
+    public float BodyLegRaiseHeightOffset = 0.5f;
     public float BodyHeightNormaliseLerpSpeed = 1;
     public float LegLerpDuration = 1;
 
@@ -103,9 +104,11 @@ public class WalkController : BaseController
     void NormaliseBodyPos()
     {
         Vector3 ground = MexPlore.RaycastToGroundSphere( Body.transform.position );
+        float target = ground.y + BodyHeightOffset + GetRaisedLegCount() * BodyLegRaiseHeightOffset;
+        NormalisedHeight = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+
         DebugLastSphereCast = Body.transform.position + Vector3.up * MexPlore.CAST_SPHERE_UP;
         DebugLastSphereCastHit = ground;
-        NormalisedHeight = Mathf.Lerp( NormalisedHeight, ground.y + BodyHeightOffset, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
     }
     #endregion
 
@@ -226,6 +229,21 @@ public class WalkController : BaseController
         {
             StaticHelpers.GetOrCreateCachedAudioSource( bank[UnityEngine.Random.Range( 0, bank.Length )], pos, GetLegPitch( sound, side ), MexPlore.GetVolume( sound ) );
         }
+    }
+
+    int GetRaisedLegCount()
+    {
+        int count = 0;
+        {
+			for ( int side = 0; side <= LEFT + RIGHT; side++ )
+            {
+                for ( int leg = 0; leg < Legs[side].Legs.Length; leg++ )
+                {
+                    count += ( ( Time.time - LegDatas[side][leg].LastMoved ) < 0.1f ) ? 1 : 0;
+                }
+            }
+        }
+        return count;
     }
     #endregion
 

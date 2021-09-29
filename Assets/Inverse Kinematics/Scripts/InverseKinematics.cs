@@ -28,6 +28,7 @@ public class InverseKinematics : MonoBehaviour
 	public Transform TargetTarget;
 
 	[Space(20)]
+	public bool IncrementalRaycasts = true;
 	public bool PhysicsEnabled = true;
 	public bool handMatchesTargetRotation = true;
 
@@ -40,7 +41,17 @@ public class InverseKinematics : MonoBehaviour
 	float arm_Length;
 	float targetDistance;
 	float adyacent;
+
+	private Vector3 InitialTargetTargetPos;
 	#endregion
+
+	private void Start()
+	{
+		if ( TargetTarget != null )
+		{
+			InitialTargetTargetPos = TargetTarget.localPosition;
+		}
+	}
 
 	void LateUpdate()
 	{
@@ -51,18 +62,35 @@ public class InverseKinematics : MonoBehaviour
 		if ( TargetTarget != null && PhysicsEnabled )
 		{
 			Vector3 pos = TargetTarget.position;
+			float dist = 0;
+			if ( IncrementalRaycasts && Application.isPlaying )
 			{
-				// TargetTarget transform retains its y, but need to raycast downwards to find the ACTUAL target pos for this movement
-				pos = MexPlore.RaycastToGroundSphere( pos );
+				int increments = 5;
+				for ( int i = 0; i < increments; i++ )
+				{
+					TargetTarget.localPosition = InitialTargetTargetPos * ( 1 - ( (float) i / increments ) );
+					pos = transform.TransformPoint( InitialTargetTargetPos * ( 1 - ( (float) i / increments ) ) );
+					{
+						// TargetTarget transform retains its y, but need to raycast downwards to find the ACTUAL target pos for this movement
+						pos = MexPlore.RaycastToGroundSphere( pos );
+					}
+					dist = ( upperArm.position - pos ).sqrMagnitude;
+					float max = ( arm_Length * arm_Length );
+					if ( dist <= max )
+					{
+						break;
+					}
+				}
 			}
-			float dist = ( target.position - pos ).sqrMagnitude;
+
+			dist = ( target.position - pos ).sqrMagnitude;
 			if ( dist > TargetMaxDistance && GetComponentInParent<WalkController>() != null )
 			{
-				GetComponentInParent<WalkController>().TryMoveLeg( target, TargetTarget.position );
+				GetComponentInParent<WalkController>().TryMoveLeg( target, pos );
 			}
 			else
 			{
-				target.position = Vector3.Lerp( target.position, TargetTarget.position, Time.deltaTime * TargetTargetLerpSpeed );
+				target.position = Vector3.Lerp( target.position, pos, Time.deltaTime * TargetTargetLerpSpeed );
 			}
 		}
 

@@ -138,6 +138,7 @@ MonoBehaviour:
   elbow: {fileID: 7257209024161759142}
   target: {fileID: 7257209024069856961}
   TargetTarget: {fileID: 1885783477232923996}
+  IncrementalRaycasts: 0
   PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 1
@@ -183,7 +184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7257209024069856960}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.2500005, y: -0.8699994, z: 0.8300014}
+  m_LocalPosition: {x: 2.2500005, y: -0.8700001, z: 0.8300014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7257209024052916322}
@@ -344,7 +345,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7257209024288852556}
-  m_LocalRotation: {x: -0.19684063, y: -0.3089319, z: 0.52419066, w: 0.7687906}
+  m_LocalRotation: {x: -0.19684072, y: -0.3089319, z: 0.52419066, w: 0.7687906}
   m_LocalPosition: {x: -0.0000023841862, y: -0.000003129244, z: -0.000017702585}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -428,7 +429,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7257209024325260810}
-  m_LocalRotation: {x: 0.68073887, y: 0.6807389, z: -0.19129704, w: 0.19129716}
+  m_LocalRotation: {x: 0.68073887, y: 0.680739, z: -0.19129704, w: 0.191297}
   m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -621,7 +622,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7257209024635214415}
-  m_LocalRotation: {x: -0.18795137, y: -0.78342986, z: -0.029513685, w: 0.5916426}
+  m_LocalRotation: {x: -0.18795133, y: -0.7834299, z: -0.02951352, w: 0.59164256}
   m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
