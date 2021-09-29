@@ -30,6 +30,10 @@ public class GrabHand : MonoBehaviour
 		Holding.transform.SetParent( transform );
 		Holding.transform.localPosition = Vector3.zero;
 		Holding.transform.localEulerAngles = Vector3.zero;
+		foreach ( var collider in Holding.GetComponentsInChildren<Collider>() )
+		{
+			collider.enabled = false;
+		}
 
 		GetComponentInParent<Arm>().OnPickup( obj );
 	}
@@ -49,6 +53,10 @@ public class GrabHand : MonoBehaviour
 
 		// Unparent
 		obj.transform.parent = null;
+		foreach ( var collider in obj.GetComponentsInChildren<Collider>( true ) )
+		{
+			collider.enabled = true;
+		}
 
 		// Make gravity affected
 		var rigid = obj.GetComponent<Rigidbody>();

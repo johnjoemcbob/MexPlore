@@ -14,7 +14,6 @@ public class LocalPlayer : MonoBehaviour
 	[HideInInspector]
 	public Vector3 Direction;
 	private Vector3 LastPos;
-	private bool grounded = true;
 
 	private void Awake()
 	{
@@ -24,6 +23,9 @@ public class LocalPlayer : MonoBehaviour
 	void Start()
     {
 		LastPos = transform.position;
+
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	public void OnSpawn()
@@ -37,17 +39,24 @@ public class LocalPlayer : MonoBehaviour
     {
 		if ( Player == null ) return;
 
-		//var current =  GetComponent<NaughtyCharacter.Character>().IsGrounded;
-		//if ( !grounded && current )
-		//{
-		//	StaticHelpers.EmitParticleDust( transform.position );
-		//}
-		//grounded = current;
-
 		if ( LastPos != transform.position )
 		{
 			Direction = LastPos - transform.position;
 			LastPos = transform.position;
+		}
+
+		if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CURSOR_RELEASE ) ) )
+		{
+			if ( Cursor.visible )
+			{
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
+			else
+			{
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
+			}
 		}
     }
 }

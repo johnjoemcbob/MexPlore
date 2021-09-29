@@ -68,6 +68,8 @@ public static class MexPlore
 	#region Static - CONTROL
 	public enum CONTROL
     {
+        BUTTON_CURSOR_RELEASE,
+
         AXIS_FORWARD,
         AXIS_RIGHT,
 
@@ -94,6 +96,8 @@ public static class MexPlore
     {
         Control = new string[(int) CONTROL.COUNT];
 
+        Control[(int) CONTROL.BUTTON_CURSOR_RELEASE] = "Cancel";
+
         Control[(int) CONTROL.AXIS_FORWARD] = "Vertical";
         Control[(int) CONTROL.AXIS_RIGHT] = "Horizontal";
 
@@ -119,6 +123,13 @@ public static class MexPlore
     #endregion
 
     #region Static - Gameplay Functions
+    public const float CAST_RAY_UP = 10;
+    public const float CAST_RAY_DIST = 1000;
+
+    public const float CAST_SPHERE_RADIUS = 1;
+    public const float CAST_SPHERE_UP = 10;
+    public const float CAST_SPHERE_DIST = 1000;
+
     public static Vector3 GetCameraDirectionalInput()
     {
         // Camera
@@ -146,14 +157,9 @@ public static class MexPlore
     public static Vector3 RaycastToGround( Vector3 pos )
     {
         // Raycast on to ground
-        RaycastHit hit;
-        int mask = 1 << LayerMask.NameToLayer( "Ground" );
-        float raydist = 1000;
-        float updist = 10;
-        Vector3 start = pos + Vector3.up * updist;
-        Vector3 raydir = -Vector3.up;
-        if ( Physics.Raycast( start, raydir, out hit, updist + raydist, mask ) )
-        {
+        RaycastHit hit = RaycastToGroundHit( pos );
+        if ( hit.collider != null )
+		{
             pos = hit.point;
         }
         return pos;
@@ -164,13 +170,39 @@ public static class MexPlore
         // Raycast on to ground
         RaycastHit hit;
         int mask = 1 << LayerMask.NameToLayer( "Ground" );
-        float raydist = 10;
-        float updist = 10;
+        float raydist = CAST_RAY_DIST;
+        float updist = CAST_RAY_UP;
         Vector3 start = pos + Vector3.up * updist;
         Vector3 raydir = -Vector3.up;
 
         Physics.Raycast( start, raydir, out hit, updist + raydist, mask );
         return hit;
     }
-	#endregion
+
+    public static Vector3 RaycastToGroundSphere( Vector3 pos )
+    {
+        // Raycast on to ground
+        RaycastHit hit = RaycastToGroundSphereHit( pos );
+        if ( hit.collider != null )
+        {
+            pos = hit.point;
+        }
+        return pos;
+    }
+
+    public static RaycastHit RaycastToGroundSphereHit( Vector3 pos )
+    {
+        // Raycast on to ground
+        RaycastHit hit;
+        int mask = 1 << LayerMask.NameToLayer( "Ground" );
+        float raydist = CAST_SPHERE_DIST;
+        float updist = CAST_SPHERE_UP;
+        float radius = CAST_SPHERE_RADIUS;
+        Vector3 start = pos + Vector3.up * updist;
+        Vector3 raydir = -Vector3.up;
+
+        Physics.SphereCast( start, radius, raydir, out hit, updist + raydist, mask );
+        return hit;
+    }
+    #endregion
 }

@@ -16,6 +16,8 @@ public class HeliCockpit : MonoBehaviour
     public float BladeVisualOffsetMultiplier = 1;
     public float BladeMaxForce = 5;
     public float BladeUpwardForce = 5;
+    public float RigidDrag = 1.5f;
+    public float RigidAngDrag = 1;
 
     [Header( "References" )]
     public Transform Rotor;
@@ -110,6 +112,7 @@ public class HeliCockpit : MonoBehaviour
             {
                 dist = Vector3.Distance( hit.point, transform.position );
                 part.transform.position = hit.point;
+                part.transform.rotation = Quaternion.LookRotation( hit.normal );
             }
 
             // Scale
@@ -142,8 +145,8 @@ public class HeliCockpit : MonoBehaviour
         var body = gameObject.AddComponent<Rigidbody>();
         {
             body.mass = 1;
-            body.drag = 0;
-            body.angularDrag = 0.05f;
+            body.drag = RigidDrag;
+            body.angularDrag = RigidAngDrag;
             body.useGravity = true;
             body.isKinematic = false;
             body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;

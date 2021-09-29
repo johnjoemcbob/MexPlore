@@ -76,10 +76,6 @@ public class OrbitCamera : MonoBehaviour
 
 	void LateUpdate()
 	{
-		if ( Input.GetKeyDown( KeyCode.Escape ) )
-		{
-			Application.Quit();
-		}
 		distance += Input.mouseScrollDelta.y * ScrollSpeed;
 
 		UpdateFocusPoint();

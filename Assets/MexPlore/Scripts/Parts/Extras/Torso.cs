@@ -32,7 +32,7 @@ public class Torso : MonoBehaviour
         float dist = CurrentLean;
         if ( GetComponentInParent<MechBody>().IsMainController )
         {
-            dist = Camera.main.transform.position.y - transform.position.y;
+            dist = Camera.main.transform.forward.y;
             CurrentLean = dist;
         }
         foreach ( var spine in Spines )

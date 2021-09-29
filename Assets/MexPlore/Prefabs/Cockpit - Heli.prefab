@@ -268,8 +268,10 @@ MonoBehaviour:
   BladeVelocitySpeedMultiplier: 1
   BladeVisualSpeedMultiplier: 720
   BladeVisualOffsetMultiplier: 1
-  BladeMaxForce: 15
-  BladeUpwardForce: 5
+  BladeMaxForce: 25
+  BladeUpwardForce: -6
+  RigidDrag: 1.5
+  RigidAngDrag: 1
   Rotor: {fileID: 3007420064687669998}
   Blades:
   - {fileID: 3007420063630486327}
@@ -295,7 +297,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 50
   Pan2D: 0
@@ -389,7 +391,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

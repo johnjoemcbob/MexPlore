@@ -66,9 +66,14 @@ public class SpringController : BaseController
     {
         base.OnCollisionEnter( collision );
 
-        // On collision, freeze again and hand extends from collision point to give mechbody proper height again
-        FootPos = collision.GetContact( 0 ).point;
-        Body.GetComponent<Rigidbody>().isKinematic = true;
-        CurrentBodyHeight = 0;
+        var mech = GetComponentInParent<MechBody>();
+        var othermech = collision.collider.GetComponentInParent<MechBody>();
+        if ( othermech == null || othermech != mech )
+        {
+            // On collision, freeze again and hand extends from collision point to give mechbody proper height again
+            FootPos = collision.GetContact( 0 ).point;
+            Body.GetComponent<Rigidbody>().isKinematic = true;
+            CurrentBodyHeight = 0;
+        }
     }
 }

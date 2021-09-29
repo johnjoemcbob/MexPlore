@@ -20,7 +20,10 @@ public class PhotonPlayerCreator : MonoBehaviourPun
 			LocalPlayer.Instance.Player.OnJoined();
 			LocalPlayer.Instance.OnSpawn();
 
-			StartCoroutine( SendDiscord() );
+			if ( !Application.isEditor )
+			{
+				StartCoroutine( SendDiscord() );
+			}
 		}
 
 		//Camera.Target = newPlayerObject.transform;
@@ -39,7 +42,7 @@ public class PhotonPlayerCreator : MonoBehaviourPun
 		headers["X-Parse-Application-Id"] = "AppId";
 		headers["X-Parse-REST-API-Key"] = "RestKey";
 		headers["Content-Type"] = "application/json";
-		WWW www = new WWW("https://discord-queer-horizon.glitch.me/mexplore/", null, headers);
+		WWW www = new WWW("https://discord-queer-horizon.glitch.me/mexplore/" + PhotonNetwork.CloudRegion + "/", null, headers);
 		while ( !www.isDone )
 			yield return 1;
 	}

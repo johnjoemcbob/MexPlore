@@ -102,30 +102,10 @@ public class WalkController : BaseController
     #region Body
     void NormaliseBodyPos()
     {
-        int positions = 0;
-        Vector3 pos = Vector3.zero;
-        {
-            // Find the IK of each leg target to get the ACTUAL hand/foot pos rather than desired!
-            for ( int leg = 0; leg < Legs[LEFT].Legs.Length; leg++ )
-            {
-                pos += Legs[LEFT].Legs[leg].GetComponentInParent<InverseKinematics>().hand.position;
-                positions++;
-            }
-            for ( int leg = 0; leg < Legs[RIGHT].Legs.Length; leg++ )
-            {
-                pos += Legs[RIGHT].Legs[leg].GetComponentInParent<InverseKinematics>().hand.position;
-                positions++;
-            }
-        }
-        float target = ( pos / positions ).y + BodyHeightOffset;
-        float dist = Mathf.Abs( target - NormalisedHeight );
-        NormalisedHeight = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed * dist );
-
-        // Clamp to height of mech from ground
-        Vector3 ground = MexPlore.RaycastToGround( Body.transform.position );
-        // Ground is min, ground+height max
-        float bodyheight = 10;
-        NormalisedHeight = Mathf.Clamp( NormalisedHeight, ground.y, ground.y + bodyheight );
+        Vector3 ground = MexPlore.RaycastToGroundSphere( Body.transform.position );
+        DebugLastSphereCast = Body.transform.position + Vector3.up * MexPlore.CAST_SPHERE_UP;
+        DebugLastSphereCastHit = ground;
+        NormalisedHeight = Mathf.Lerp( NormalisedHeight, ground.y + BodyHeightOffset, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
     }
     #endregion
 
@@ -290,4 +270,27 @@ public class WalkController : BaseController
         return -1;
     }
     #endregion
+
+    #region Debug
+    public bool DEBUG = true;
+    private Vector3 DebugLastSphereCast = Vector3.zero;
+    private Vector3 DebugLastSphereCastHit = Vector3.zero;
+
+    private void OnDrawGizmos()
+    {
+        if ( DEBUG )
+        {
+            if ( DebugLastSphereCast != Vector3.zero )
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere( DebugLastSphereCast, MexPlore.CAST_SPHERE_RADIUS );
+            }
+            if ( DebugLastSphereCastHit != Vector3.zero )
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawSphere( DebugLastSphereCastHit, MexPlore.CAST_SPHERE_RADIUS );
+            }
+        }
+    }
+	#endregion
 }

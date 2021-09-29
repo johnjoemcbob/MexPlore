@@ -50,7 +50,12 @@ public class InverseKinematics : MonoBehaviour
 		// If there is a TargetTarget, then the normal target gets moved to this point at variable distance interval
 		if ( TargetTarget != null && PhysicsEnabled )
 		{
-			float dist = ( target.position - TargetTarget.position ).sqrMagnitude;
+			Vector3 pos = TargetTarget.position;
+			{
+				// TargetTarget transform retains its y, but need to raycast downwards to find the ACTUAL target pos for this movement
+				pos = MexPlore.RaycastToGroundSphere( pos );
+			}
+			float dist = ( target.position - pos ).sqrMagnitude;
 			if ( dist > TargetMaxDistance && GetComponentInParent<WalkController>() != null )
 			{
 				GetComponentInParent<WalkController>().TryMoveLeg( target, TargetTarget.position );
