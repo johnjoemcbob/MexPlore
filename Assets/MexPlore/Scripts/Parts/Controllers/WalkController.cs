@@ -31,6 +31,7 @@ public class WalkController : BaseController
     public float BodyLegRaiseHeightOffset = 0.5f;
     public float BodyHeightNormaliseLerpSpeed = 1;
     public float LegLerpDuration = 1;
+    public float MaxMoveMultiplier = 1;
 
     [Header( "References" )]
     public GameObject Body;
@@ -80,35 +81,73 @@ public class WalkController : BaseController
             Body.GetComponent<MechBody>().SetTargetDirection( camdir.normalized );
 
             // Movement
-            Vector3 dir = MexPlore.GetCameraDirectionalInput();
-            LastDirection = dir;
-            Vector3 pos = Body.transform.position + dir * MoveSpeed * Time.deltaTime;
-                pos.y = NormalisedHeight;
-            Body.GetComponent<MechBody>().SetTargetPos( pos );
-
-            NormaliseBodyPos();
+            TryMove( MexPlore.CAST_SPHERE_UP );
         }
         else if ( DisabledStillNormaliseBodyHeight )
         {
             // If not in control, still normalise body height relative to feet
             Vector3 pos = Body.transform.position;
-                pos.y = NormalisedHeight;
+                NormalisedHeight = NormaliseBodyPos( pos );
+                pos.y = Mathf.Lerp( pos.y, NormalisedHeight, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
             Body.GetComponent<MechBody>().SetTargetPos( pos );
         }
 
         UpdateLegs();
     }
+
+    // Recursive function!
+    void TryMove( float updist )
+	{
+        // Get input + required height at new position (for this updist)
+        Vector3 dir = MexPlore.GetCameraDirectionalInput();
+        LastDirection = dir;
+        float lastnormal = NormalisedHeight;
+        Vector3 pos = Body.transform.position + dir * MoveSpeed * Time.deltaTime;
+        {
+            NormalisedHeight = NormaliseBodyPos( pos );
+            pos.y = Mathf.Lerp( pos.y, NormalisedHeight, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+        }
+
+        // Verify that this new position is within range on one leg stride (in case massive height difference)
+        float dist = Vector3.Distance( Body.transform.position, pos );
+        float leglength = GetComponentInChildren<InverseKinematics>().ArmLength * MaxMoveMultiplier * Time.deltaTime;
+
+        // Verify that this new position doesn't pass the torso through solid objects
+        Vector3 offset = Vector3.up * 3;
+        Vector3 start = Body.transform.position + offset;
+        Vector3 testpos = start + dir * MoveSpeed * 10 * Time.deltaTime;
+        Vector3 castpos = MexPlore.RaycastSphere( start, testpos, 0.2f );
+        bool wayblocked = start != castpos;
+
+        // Debug
+        DebugLastSphereCast = castpos;
+        DebugLastSphereCastHit = testpos;
+
+        // If it's blocked, undo the move and try a lower ground level
+        if ( dist >= leglength || wayblocked )
+        {
+            pos = Body.transform.position;
+            if ( updist > 0 )
+            {
+                TryMove( updist - 1 );
+            }
+        }
+        Body.GetComponent<MechBody>().SetTargetPos( pos );
+    }
     #endregion
 
     #region Body
-    void NormaliseBodyPos()
+    float NormaliseBodyPos( Vector3 pos, float updist = MexPlore.CAST_SPHERE_UP )
     {
-        Vector3 ground = MexPlore.RaycastToGroundSphere( Body.transform.position );
+        Vector3 ground = MexPlore.RaycastToGroundSphere( pos, updist );
         float target = ground.y + BodyHeightOffset + GetRaisedLegCount() * BodyLegRaiseHeightOffset;
-        NormalisedHeight = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+        //float normalised = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+        float normalised = target;
 
-        DebugLastSphereCast = Body.transform.position + Vector3.up * MexPlore.CAST_SPHERE_UP;
-        DebugLastSphereCastHit = ground;
+        //DebugLastSphereCast = Body.transform.position + Vector3.up * updist;
+        //DebugLastSphereCastHit = ground;
+
+        return normalised;
     }
     #endregion
 
@@ -193,10 +232,22 @@ public class WalkController : BaseController
                     target = pos;
                     progress -= 0.5f; // Normalised to 0.5 for lerp progress
 
-                    // Play leg raise sound
+                    // Play leg lower sound
                     if ( !lowered )
                     {
                         TryPlaySound( SoundBankLegLower, Legs[side].Legs[location].position, side, MexPlore.SOUND.MECH_LEG_LOWER );
+
+                        var ik = leg.GetComponentInParent<InverseKinematics>();
+                        var trans = ik.forearm.transform;
+                        var particlepos = trans.position;// + trans.forward;
+                        Vector3 scale = Vector3.one * 0.4f;
+						//StaticHelpers.GetOrCreateCachedPrefab( "Particle Noise Zero", particlepos, Quaternion.LookRotation( -ik.transform.right ), scale );
+						//StaticHelpers.GetOrCreateCachedPrefab( "Particle Noise Zero", particlepos, Quaternion.LookRotation( ik.transform.right ), scale );
+						foreach ( var particle in ik.GetComponentsInChildren<ParticleSystem>() )
+						{
+                            particle.Play();
+						}
+
                         lowered = true;
                     }
                 }

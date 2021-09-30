@@ -87,6 +87,8 @@ public static class MexPlore
         BUTTON_BRIDGE_EXTEND,
         BUTTON_CRAWL_CLAMP,
 
+        BUTTON_SPEAK,
+
         COUNT,
     }
 
@@ -114,6 +116,8 @@ public static class MexPlore
 
         Control[(int) CONTROL.BUTTON_BRIDGE_EXTEND] = "Jump";
         Control[(int) CONTROL.BUTTON_CRAWL_CLAMP] = "Jump";
+
+        Control[(int) CONTROL.BUTTON_SPEAK] = "Submit";
     }
 
     public static string GetControl( CONTROL control )
@@ -179,10 +183,10 @@ public static class MexPlore
         return hit;
     }
 
-    public static Vector3 RaycastToGroundSphere( Vector3 pos )
+    public static Vector3 RaycastToGroundSphere( Vector3 pos, float updist = CAST_SPHERE_UP )
     {
         // Raycast on to ground
-        RaycastHit hit = RaycastToGroundSphereHit( pos );
+        RaycastHit hit = RaycastToGroundSphereHit( pos, updist );
         if ( hit.collider != null )
         {
             pos = hit.point;
@@ -190,18 +194,41 @@ public static class MexPlore
         return pos;
     }
 
-    public static RaycastHit RaycastToGroundSphereHit( Vector3 pos )
+    public static RaycastHit RaycastToGroundSphereHit( Vector3 pos, float updist = CAST_SPHERE_UP )
     {
         // Raycast on to ground
         RaycastHit hit;
         int mask = 1 << LayerMask.NameToLayer( "Ground" );
         float raydist = CAST_SPHERE_DIST;
-        float updist = CAST_SPHERE_UP;
         float radius = CAST_SPHERE_RADIUS;
         Vector3 start = pos + Vector3.up * updist;
         Vector3 raydir = -Vector3.up;
 
         Physics.SphereCast( start, radius, raydir, out hit, updist + raydist, mask );
+        return hit;
+    }
+
+    public static Vector3 RaycastSphere( Vector3 pos, Vector3 target, float radius = CAST_SPHERE_RADIUS )
+    {
+        // Raycast on to ground
+        RaycastHit hit = RaycastSphereHit( pos, target, radius );
+        if ( hit.collider != null )
+        {
+            pos = hit.point;
+        }
+        return pos;
+    }
+
+    public static RaycastHit RaycastSphereHit( Vector3 pos, Vector3 target, float radius = CAST_SPHERE_RADIUS )
+    {
+        // Raycast on to ground
+        RaycastHit hit;
+        int mask = 1 << LayerMask.NameToLayer( "Ground" );
+        float raydist = Vector3.Distance( pos, target );
+        Vector3 start = pos;
+        Vector3 raydir = ( target - pos ).normalized;
+
+        Physics.SphereCast( start, radius, raydir, out hit, raydist, mask );
         return hit;
     }
     #endregion

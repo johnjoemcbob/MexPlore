@@ -84,8 +84,10 @@ MonoBehaviour:
   OvershootMultiplier: 6
   BetweenMoveDelay: 0.01
   BodyHeightOffset: 1
+  BodyLegRaiseHeightOffset: 0.5
   BodyHeightNormaliseLerpSpeed: 1
   LegLerpDuration: 0.1
+  MaxMoveMultiplier: 6
   Body: {fileID: 0}
   Legs:
   - Legs:
@@ -104,6 +106,7 @@ MonoBehaviour:
   SoundBankFootstep:
   - {fileID: 8300000, guid: 04e02592ec9fe2f42888429d5aecd962, type: 3}
   - {fileID: 8300000, guid: efa870ef11baafb41a5c645181d231df, type: 3}
+  DEBUG: 1
 --- !u!1 &6777233950063144145
 GameObject:
   m_ObjectHideFlags: 0

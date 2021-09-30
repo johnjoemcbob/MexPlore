@@ -25,6 +25,7 @@ public class MechBody : MonoBehaviour
 	private Vector3 TargetPos;
 	private Vector3 TargetDirection;
 	private Quaternion TorsoRotation;
+	private Dictionary<string, int> OldLayers = new Dictionary<string, int>();
 
 	public virtual void Awake()
 	{
@@ -95,12 +96,26 @@ public class MechBody : MonoBehaviour
 
 	public void OnDock()
 	{
-
+		OldLayers.Clear();
+		foreach ( var collider in GetComponentsInChildren<Collider>() )
+		{
+			if ( !OldLayers.ContainsKey( collider.name ) )
+			{
+				OldLayers.Add( collider.name, collider.gameObject.layer );
+			}
+			collider.gameObject.layer = LayerMask.NameToLayer( "Self" );
+		}
 	}
 
 	public void OnUnDock()
 	{
 		Vector3 ground = MexPlore.RaycastToGround( transform.position );
 		TargetPos = ground + Vector3.up * OfflineGroundHeight;
+
+		foreach ( var collider in GetComponentsInChildren<Collider>() )
+		{
+			collider.gameObject.layer = OldLayers[collider.name];
+		}
+		OldLayers.Clear();
 	}
 }

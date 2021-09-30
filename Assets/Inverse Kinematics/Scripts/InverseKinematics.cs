@@ -36,9 +36,13 @@ public class InverseKinematics : MonoBehaviour
 	public bool DebugDraw = true;
 	#endregion
 
+	#region Variables - Public
+	[HideInInspector]
+	public float ArmLength;
+	#endregion
+
 	#region Variables - Private
 	float angle;
-	float arm_Length;
 	float targetDistance;
 	float adyacent;
 
@@ -75,7 +79,7 @@ public class InverseKinematics : MonoBehaviour
 						pos = MexPlore.RaycastToGroundSphere( pos );
 					}
 					dist = ( upperArm.position - pos ).sqrMagnitude;
-					float max = ( arm_Length * arm_Length );
+					float max = ( ArmLength * ArmLength );
 					if ( dist <= max )
 					{
 						break;
@@ -102,9 +106,9 @@ public class InverseKinematics : MonoBehaviour
 
 			Vector3 cross = Vector3.Cross (elbow.position - upperArm.position, forearm.position - upperArm.position);
 
-			arm_Length = UpperArmLength + LowerArmLength;
+			ArmLength = UpperArmLength + LowerArmLength;
 			targetDistance = Vector3.Distance( upperArm.position, target.position );
-			targetDistance = Mathf.Min( targetDistance, arm_Length - arm_Length * 0.001f );
+			targetDistance = Mathf.Min( targetDistance, ArmLength - ArmLength * 0.001f );
 
 			adyacent = ( ( UpperArmLength * UpperArmLength ) - ( LowerArmLength * LowerArmLength ) + ( targetDistance * targetDistance ) ) / ( 2 * targetDistance );
 
