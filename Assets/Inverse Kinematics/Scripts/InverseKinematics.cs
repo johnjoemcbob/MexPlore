@@ -39,8 +39,6 @@ public class InverseKinematics : MonoBehaviour
 	#region Variables - Public
 	[HideInInspector]
 	public float ArmLength;
-
-	public Coroutine WalkCoroutine;
 	#endregion
 
 	#region Variables - Private
@@ -51,7 +49,6 @@ public class InverseKinematics : MonoBehaviour
 	private Vector3 InitialTargetTargetPos;
 	#endregion
 
-	#region MonoBehaviour
 	private void Start()
 	{
 		if ( TargetTarget != null )
@@ -65,89 +62,22 @@ public class InverseKinematics : MonoBehaviour
 		// Extend arms to correct length
 		UpdateArmLength();
 
-		// Move target and decide when to walk
-		UpdateTarget();
-
-		// Do the walking
-		UpdateLegWalkState( CurrentLegWalkState );
-
-		// Move the arm IKs
-		UpdateIK();
-	}
-
-	void OnDrawGizmos()
-	{
-		if ( DebugDraw )
-		{
-			if ( upperArm != null && elbow != null && hand != null && target != null && elbow != null )
-			{
-				Gizmos.color = Color.gray;
-				Gizmos.DrawLine( upperArm.position, forearm.position );
-				Gizmos.DrawLine( forearm.position, hand.position );
-				Gizmos.color = Color.red;
-				Gizmos.DrawLine( upperArm.position, target.position );
-				Gizmos.color = Color.blue;
-				Gizmos.DrawLine( forearm.position, elbow.position );
-			}
-		}
-	}
-	#endregion
-
-	#region Update
-	void UpdateArmLength()
-	{
-		if ( VisualUpperArm != null )
-		{
-			Vector3 scale = VisualUpperArm.localScale;
-			{
-				scale.z = UpperArmLength;
-			}
-			VisualUpperArm.localScale = scale;
-			Vector3 pos = VisualUpperArm.localPosition;
-			{
-				pos.z = UpperArmLength / 2;
-			}
-			VisualUpperArm.localPosition = pos;
-		}
-		if ( VisualLowerArm != null )
-		{
-			Vector3 scale = VisualLowerArm.localScale;
-			{
-				scale.z = LowerArmLength;
-			}
-			VisualLowerArm.localScale = scale;
-			Vector3 pos = VisualLowerArm.localPosition;
-			{
-				pos.z = LowerArmLength / 2;
-			}
-			VisualLowerArm.localPosition = pos;
-		}
-		forearm.localPosition = new Vector3( 0, 0, 1 ) * UpperArmLength;
-		hand.localPosition = new Vector3( 0, 0, 1 ) * LowerArmLength;
-	}
-
-	void UpdateTarget()
-	{
 		// If there is a TargetTarget, then the normal target gets moved to this point at variable distance interval
 		if ( TargetTarget != null && PhysicsEnabled )
 		{
-			var walker = GetComponentInParent<WalkController>();
-			// If actual desired pos is out of range, try closer
 			Vector3 pos = TargetTarget.position;
+
+			var walker = GetComponentInParent<WalkController>();
 			if ( walker != null )
 			{
-				pos += walker.GetOvershoot();
-				float dist;
+				float dist = 0;
 				if ( IncrementalRaycasts && Application.isPlaying )
 				{
-					bool success = false;
 					int increments = 5;
-					// Try from the desired pos to directly below the mech in incremental steps
 					for ( int i = 0; i < increments; i++ )
 					{
-						pos = InitialTargetTargetPos * ( 1 - ( (float) i / increments ) );
-						TargetTarget.localPosition = pos;
-						pos = transform.TransformPoint( pos ) + walker.GetOvershoot();
+						TargetTarget.localPosition = InitialTargetTargetPos * ( 1 - ( (float) i / increments ) );
+						pos = transform.TransformPoint( InitialTargetTargetPos * ( 1 - ( (float) i / increments ) ) ) + walker.GetOvershoot();
 						{
 							// TargetTarget transform retains its y, but need to raycast downwards to find the ACTUAL target pos for this movement
 							pos = MexPlore.RaycastToGroundSphere( pos );
@@ -156,40 +86,15 @@ public class InverseKinematics : MonoBehaviour
 						float max = ( ArmLength * ArmLength );
 						if ( dist <= max )
 						{
-							success = true;
 							break;
-						}
-					}
-					// Otherwise try further away
-					if ( !success )
-					{
-						for ( int i = 0; i < increments; i++ )
-						{
-							pos = InitialTargetTargetPos * ( 1 + ( (float) i / increments ) );
-							TargetTarget.localPosition = pos;
-							pos = transform.TransformPoint( pos ) + walker.GetOvershoot();
-							{
-								// TargetTarget transform retains its y, but need to raycast downwards to find the ACTUAL target pos for this movement
-								pos = MexPlore.RaycastToGroundSphere( pos );
-							}
-							dist = ( upperArm.position - pos ).sqrMagnitude;
-							float max = ( ArmLength * ArmLength );
-							if ( dist <= max )
-							{
-								success = true;
-								break;
-							}
 						}
 					}
 				}
 
 				dist = ( target.position - pos ).sqrMagnitude;
-				float currentfootdist = ( hand.position - target.position ).sqrMagnitude;
-				float maxdist = ArmLength;
-				bool force = currentfootdist > maxdist;
-				if ( ( dist > TargetMaxDistance || force ) )
+				if ( dist > TargetMaxDistance )
 				{
-					walker.TryMoveLeg( target, pos, force );
+					GetComponentInParent<WalkController>().TryMoveLeg( target, pos );
 				}
 			}
 			else
@@ -197,10 +102,7 @@ public class InverseKinematics : MonoBehaviour
 				target.position = Vector3.Lerp( target.position, pos, Time.deltaTime * TargetTargetLerpSpeed );
 			}
 		}
-	}
 
-	void UpdateIK()
-	{
 		// IK
 		if ( upperArm != null && forearm != null && hand != null && elbow != null && target != null )
 		{
@@ -247,145 +149,61 @@ public class InverseKinematics : MonoBehaviour
 			}
 		}
 	}
-	#endregion
 
-	#region Leg Walk
-	public enum LegWalkState
+	void OnDrawGizmos()
 	{
-		Idle,
-		Raise,
-		Lower,
-	}
-	public LegWalkState CurrentLegWalkState;
-
-	private float CurrentLegWalkTime = 0;
-	private Vector3 LegWalkStartPos;
-	private Vector3 LegWalkTargetPos;
-
-	public void StartWalking( Vector3 target )
-	{
-		LegWalkTargetPos = target;
-		if ( CurrentLegWalkState == LegWalkState.Idle )
+		if ( DebugDraw )
 		{
-			SwitchLegWalkState( LegWalkState.Raise );
+			if ( upperArm != null && elbow != null && hand != null && target != null && elbow != null )
+			{
+				Gizmos.color = Color.gray;
+				Gizmos.DrawLine( upperArm.position, forearm.position );
+				Gizmos.DrawLine( forearm.position, hand.position );
+				Gizmos.color = Color.red;
+				Gizmos.DrawLine( upperArm.position, target.position );
+				Gizmos.color = Color.blue;
+				Gizmos.DrawLine( forearm.position, elbow.position );
+			}
 		}
 	}
 
-	public bool IsWalking()
+	void UpdateArmLength()
 	{
-		return CurrentLegWalkState != LegWalkState.Idle;
-	}
-
-	public void SwitchLegWalkState( LegWalkState state )
-	{
-		FinishLegWalkState( CurrentLegWalkState );
-		SetLegWalkState( state );
-	}
-
-	void SetLegWalkState( LegWalkState state )
-	{
-		CurrentLegWalkState = state;
-		StartLegWalkState( CurrentLegWalkState );
-	}
-
-	void StartLegWalkState( LegWalkState state  )
-	{
-		var walker = GetComponentInParent<WalkController>();
-
-		switch ( state )
+		if ( VisualUpperArm != null )
 		{
-			case LegWalkState.Idle:
-				break;
-			case LegWalkState.Raise:
-				// Start moving
-				CurrentLegWalkTime = 0;
-				LegWalkStartPos = target.position;
-
-				// Effects
-				walker.TryPlaySound( walker.SoundBankLegRaise, this, MexPlore.SOUND.MECH_LEG_RAISE );
-
-				break;
-			case LegWalkState.Lower:
-				// Start lowering
-
-				// Effects
-				walker.TryPlaySound( walker.SoundBankLegLower, this, MexPlore.SOUND.MECH_LEG_LOWER );
-				foreach ( var particle in GetComponentsInChildren<ParticleSystem>() )
-				{
-					particle.Play();
-				}
-
-				break;
-			default:
-				break;
+			Vector3 scale = VisualUpperArm.localScale;
+			{
+				scale.z = UpperArmLength;
+			}
+			VisualUpperArm.localScale = scale;
+			Vector3 pos = VisualUpperArm.localPosition;
+			{
+				pos.z = UpperArmLength / 2;
+			}
+			VisualUpperArm.localPosition = pos;
 		}
-	}
-
-	void UpdateLegWalkState( LegWalkState state )
-	{
-		var walker = GetComponentInParent<WalkController>();
-		if ( walker == null ) return;
-
-		CurrentLegWalkTime += Time.deltaTime;
-
-		Vector3 targetpos = Vector3.zero;
-		float progress = CurrentLegWalkTime / walker.LegLerpDuration;
-
-		switch ( state )
+		//else
+		//{
+		//	VisualUpperArm = transform.Find( "ShoulderJoint/UpperArm" );
+		//}
+		if ( VisualLowerArm != null )
 		{
-			case LegWalkState.Idle:
-				CurrentLegWalkTime = 0;
-				break;
-			case LegWalkState.Raise:
-				targetpos = LegWalkStartPos + ( LegWalkTargetPos - LegWalkStartPos ) / 2 + Vector3.up * 1;
-				if ( progress > 0.5f )
-				{
-					SwitchLegWalkState( LegWalkState.Lower );
-				}
-				break;
-			case LegWalkState.Lower:
-				targetpos = LegWalkTargetPos;
-				if ( progress >= 1 )
-				{
-					SwitchLegWalkState( LegWalkState.Idle );
-				}
-				progress -= 0.5f;
-				break;
-			default:
-				break;
+			Vector3 scale = VisualLowerArm.localScale;
+			{
+				scale.z = LowerArmLength;
+			}
+			VisualLowerArm.localScale = scale;
+			Vector3 pos = VisualLowerArm.localPosition;
+			{
+				pos.z = LowerArmLength / 2;
+			}
+			VisualLowerArm.localPosition = pos;
 		}
-
-		// Move to target
-		if ( targetpos != Vector3.zero )
-		{
-			progress *= 2;
-			Vector3 lerpedpos = Vector3.Lerp( LegWalkStartPos, targetpos, progress );
-			target.position = lerpedpos;
-			walker.StoreNewLegPos();
-		}
+		//else
+		//{
+		//	VisualLowerArm = transform.Find( "ShoulderJoint/ElbowJoint/ForeArm" );
+		//}
+		forearm.localPosition = new Vector3( 0, 0, 1 ) * UpperArmLength;
+		hand.localPosition = new Vector3( 0, 0, 1 ) * LowerArmLength;
 	}
-
-	void FinishLegWalkState( LegWalkState state )
-	{
-		var walker = GetComponentInParent<WalkController>();
-
-		switch ( state )
-		{
-			case LegWalkState.Idle:
-				break;
-			case LegWalkState.Raise:
-				break;
-			case LegWalkState.Lower:
-				// Play footstep sound
-				walker.TryPlaySound( walker.SoundBankFootstep, this, MexPlore.SOUND.MECH_FOOTSTEP );
-
-				// Play particle effect
-				StaticHelpers.EmitParticleDust( target.position );
-
-				break;
-			default:
-				break;
-		}
-	}
-	#endregion
 }
