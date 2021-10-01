@@ -81,8 +81,8 @@ MonoBehaviour:
   IsMainController: 0
   DisabledStillNormaliseBodyHeight: 0
   MoveSpeed: 24
-  OvershootMultiplier: 6
-  BetweenMoveDelay: 0.01
+  OvershootMultiplier: 3
+  BetweenMoveDelay: 0.2
   BodyHeightOffset: 1
   BodyLegRaiseHeightOffset: 0.5
   BodyHeightNormaliseLerpSpeed: 1

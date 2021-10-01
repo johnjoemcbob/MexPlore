@@ -115,7 +115,7 @@ public class WalkController : BaseController
         // Verify that this new position doesn't pass the torso through solid objects
         Vector3 offset = Vector3.up * 3;
         Vector3 start = Body.transform.position + offset;
-        Vector3 testpos = start + dir * MoveSpeed * 10 * Time.deltaTime;
+        Vector3 testpos = start + dir * MoveSpeed * Time.deltaTime;
         Vector3 castpos = MexPlore.RaycastSphere( start, testpos, 0.2f );
         bool wayblocked = start != castpos;
 
@@ -177,109 +177,23 @@ public class WalkController : BaseController
         }
     }
 
-    public void TryMoveLeg( Transform leg, Vector3 pos )
-    {
-        // Add current direction of movement to the target pos as overshoot
-        pos += LastDirection * OvershootMultiplier;
-
-        int side = GetLegSide( leg );
-        int other = GetOtherSide( side );
-        int location = GetLegIndex( leg );
-        bool canmove = 
-            //IsMainController && // Is active!
-            !LegDatas[side][location].IsMoving && // Isn't already moving
-            LegDatas[side][location].NextToMove && // Is next to move
-            //( LegDatas[other][location].LastMoved + BetweenMoveDelay < Time.time );
-            !LegDatas[other][location].IsMoving; // Other side leg isn't currently moving
-        if ( canmove )
-        {
-            pos = MexPlore.RaycastToGround( pos );
-
-            // Start lerp
-            LegDatas[side][location].TargetPosition = pos;
-            StartCoroutine( MoveLeg( side, location, pos ) );
-
-            LegDatas[side][location].LastMoved = Time.time;
-            LegDatas[side][location].NextToMove = false;
-            LegDatas[other][location].NextToMove = true;
-        }
-    }
-
-    IEnumerator MoveLeg( int side, int location, Vector3 pos )
-    {
-        // Play leg raise sound
-        TryPlaySound( SoundBankLegRaise, Legs[side].Legs[location].position, side, MexPlore.SOUND.MECH_LEG_RAISE );
-
-        bool lowered = false;
-
-        LegDatas[side][location].IsMoving = true;
-        {
-            Transform leg = Legs[side].Legs[location];
-            Vector3 legstartpos = leg.position;
-            float starttime = Time.time;
-            while ( Time.time <= ( starttime + LegLerpDuration ) )
-            {
-                float elapsed = Time.time - starttime;
-                float progress = elapsed / LegLerpDuration;
-                // Move to halfway between the old and new positions, and upwards
-                Vector3 target = legstartpos + ( pos - legstartpos ) / 2 + Vector3.up * 1;
-                // Unitl half way through the move duration
-                if ( progress >= 0.5f )
-                {
-                    // Store current leg position as new lerp start point
-                    legstartpos = leg.position;
-                    // Then move to the new position
-                    target = pos;
-                    progress -= 0.5f; // Normalised to 0.5 for lerp progress
-
-                    // Play leg lower sound
-                    if ( !lowered )
-                    {
-                        TryPlaySound( SoundBankLegLower, Legs[side].Legs[location].position, side, MexPlore.SOUND.MECH_LEG_LOWER );
-
-                        var ik = leg.GetComponentInParent<InverseKinematics>();
-                        var trans = ik.forearm.transform;
-                        var particlepos = trans.position;// + trans.forward;
-                        Vector3 scale = Vector3.one * 0.4f;
-						//StaticHelpers.GetOrCreateCachedPrefab( "Particle Noise Zero", particlepos, Quaternion.LookRotation( -ik.transform.right ), scale );
-						//StaticHelpers.GetOrCreateCachedPrefab( "Particle Noise Zero", particlepos, Quaternion.LookRotation( ik.transform.right ), scale );
-						foreach ( var particle in ik.GetComponentsInChildren<ParticleSystem>() )
-						{
-                            particle.Play();
-						}
-
-                        lowered = true;
-                    }
-                }
-                Vector3 lerpedpos = Vector3.Lerp( legstartpos, target, progress * 2 );
-                Legs[side].Legs[location].position = lerpedpos;
-                //LegDatas[side][location].Position = lerpedpos;
-                StoreNewLegPos();
-
-                yield return new WaitForEndOfFrame();
-            }
-        }
-        LegDatas[side][location].IsMoving = false;
-
-        // Play footstep sound
-        TryPlaySound( SoundBankFootstep, pos, side, MexPlore.SOUND.MECH_FOOTSTEP );
-
-        // Play particle effect
-        StaticHelpers.EmitParticleDust( pos );
-    }
-
     float GetLegPitch( MexPlore.SOUND sound, int side )
 	{
         Vector3 range = MexPlore.GetPitchRange( sound );
         return UnityEngine.Random.Range( range.x, range.y ) + ( side + 1 ) * range.z;
     }
 
-    void TryPlaySound( AudioClip[] bank, Vector3 pos, int side, MexPlore.SOUND sound )
-	{
+    public void TryPlaySound( AudioClip[] bank, Vector3 pos, int side, MexPlore.SOUND sound )
+    {
         if ( bank.Length > 0 )
         {
             StaticHelpers.GetOrCreateCachedAudioSource( bank[UnityEngine.Random.Range( 0, bank.Length )], pos, GetLegPitch( sound, side ), MexPlore.GetVolume( sound ) );
         }
+    }
+
+    public void TryPlaySound( AudioClip[] bank, InverseKinematics ik, MexPlore.SOUND sound )
+    {
+        TryPlaySound( bank, ik.target.position, GetLegSide( ik.target ), sound );
     }
 
     int GetRaisedLegCount()
@@ -295,6 +209,62 @@ public class WalkController : BaseController
             }
         }
         return count;
+    }
+    #endregion
+
+    #region Move Leg
+    public Vector3 GetOvershoot()
+	{
+        return LastDirection * OvershootMultiplier;
+    }
+
+    public void TryMoveLeg( Transform leg, Vector3 pos, bool force = false )
+    {
+        // Add current direction of movement to the target pos as overshoot
+        //pos += LastDirection * OvershootMultiplier;
+
+        int side = GetLegSide( leg );
+        int other = GetOtherSide( side );
+        int location = GetLegIndex( leg );
+        bool canmove = 
+            //IsMainController && // Is active!
+            //!LegDatas[side][location].IsMoving && // Isn't already moving
+            ( LegDatas[side][location].NextToMove ) && // && LegDatas[side].Length == 1 ) && // Is next to move
+            ( LegDatas[side][location].LastMoved + LegLerpDuration + BetweenMoveDelay < Time.time ) && // Isn't already moving
+            (
+				( LegDatas[other][location].LastMoved + LegLerpDuration < Time.time ) || // Other side leg isn't currently moving
+                force
+			) &&
+		    true; // For easy commenting of other lines :)
+        if ( canmove || force )
+        {
+            Vector3 ground = MexPlore.RaycastToGround( pos );
+
+            var ik = Legs[side].Legs[location].GetComponentInParent<InverseKinematics>();
+            float dist = Vector3.Distance( ik.transform.position, ground );
+            bool valid = ( dist <= ik.ArmLength );
+            if ( valid || force )
+            {
+                // Start lerp
+                LegDatas[side][location].TargetPosition = ground;
+                if ( !ik.IsWalking() || force )
+                {
+                    ik.StartWalking( ground );
+
+                    Debug.DrawRay( ground, Vector3.up );
+                    LegDatas[side][location].LastMoved = Time.time;
+                }
+            }
+
+            LegDatas[side][location].NextToMove = false;
+            LegDatas[other][location].NextToMove = true;
+            //int next = location + 1;
+            //if ( next >= LegDatas[other].Length )
+            //{
+            //    next = 0;
+            //}
+            //LegDatas[other][next].NextToMove = true;
+        }
     }
     #endregion
 

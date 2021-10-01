@@ -51,11 +51,11 @@ MonoBehaviour:
   DisabledStillNormaliseBodyHeight: 0
   MoveSpeed: 12
   OvershootMultiplier: 4
-  BetweenMoveDelay: 0.01
+  BetweenMoveDelay: 0.3
   BodyHeightOffset: 1
   BodyLegRaiseHeightOffset: 0.5
   BodyHeightNormaliseLerpSpeed: 1
-  LegLerpDuration: 0.3
+  LegLerpDuration: 0.2
   MaxMoveMultiplier: 3
   Body: {fileID: 0}
   Legs:
@@ -116,6 +116,10 @@ PrefabInstance:
     - target: {fileID: 4311794728893809821, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5787800857150893822, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
+      propertyPath: TargetMaxDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6234850024615040918, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -280,6 +284,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5787800857150893822, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
+      propertyPath: TargetMaxDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6234850024615040918, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.07
@@ -439,6 +447,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5787800857150893822, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
+      propertyPath: TargetMaxDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6234850024615040918, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.07
@@ -585,6 +597,10 @@ PrefabInstance:
     - target: {fileID: 4311794728893809821, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5787800857150893822, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
+      propertyPath: TargetMaxDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6234850024615040918, guid: 2e1fc14fe68c90d40a676fdbcf18c45a, type: 3}
       propertyPath: m_LocalPosition.x
