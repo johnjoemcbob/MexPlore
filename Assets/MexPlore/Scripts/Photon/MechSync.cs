@@ -48,10 +48,20 @@ public class MechSync : MonoBehaviourPun, IPunObservable
 					stream.SendNext( torso.CurrentLean );
 				}
 
-				// Arms & Legs
+				// Arms & Legs - Not walkers!
 				foreach ( var ik in Mech.GetComponentsInChildren<InverseKinematics>() )
 				{
-					stream.SendNext( ik.TargetTarget.position );
+					if ( !ik.GetComponentInParent<WalkController>() )
+					{
+						if ( ik.TargetTarget != null )
+						{
+							stream.SendNext( ik.TargetTarget.position );
+						}
+						else
+						{
+							stream.SendNext( ik.target.position );
+						}
+					}
 				}
 
 				// Bridges
@@ -89,10 +99,20 @@ public class MechSync : MonoBehaviourPun, IPunObservable
 					torso.CurrentLean = (float) stream.ReceiveNext();
 				}
 
-				// Arms & Legs
+				// Arms & Legs - Not walkers!
 				foreach ( var ik in Mech.GetComponentsInChildren<InverseKinematics>() )
 				{
-					ik.TargetTarget.position = (Vector3) stream.ReceiveNext();
+					if ( !ik.GetComponentInParent<WalkController>() )
+					{
+						if ( ik.TargetTarget != null )
+						{
+							ik.TargetTarget.position = (Vector3) stream.ReceiveNext();
+						}
+						else
+						{
+							ik.target.position = (Vector3) stream.ReceiveNext();
+						}
+					}
 				}
 
 				// Bridges

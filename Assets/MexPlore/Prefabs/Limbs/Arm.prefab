@@ -142,6 +142,7 @@ MonoBehaviour:
   PhysicsEnabled: 1
   handMatchesTargetRotation: 1
   DebugDraw: 1
+  ArmLength: 7
 --- !u!114 &2786254122283282749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +159,9 @@ MonoBehaviour:
   ExtendLength: 10
   AboveHeadHeight: 6
   EngineHeight: 2
+  SoundExtend: {fileID: 8300000, guid: 75c09e001e60a954e8386c94e6ba5626, type: 3}
+  Extended: 0
+  JustPunched: 0
 --- !u!1 &7257209024069856960
 GameObject:
   m_ObjectHideFlags: 0

@@ -182,7 +182,7 @@ public class WalkController : BaseController
         return LastDirection * OvershootMultiplier;
     }
 
-    public void TryMoveLeg( Transform leg, Vector3 pos )
+    public void TryMoveLeg( Transform leg, Vector3 pos, bool force = false )
     {
         // Add current direction of movement to the target pos as overshoot
         //pos += LastDirection * OvershootMultiplier;
@@ -198,15 +198,21 @@ public class WalkController : BaseController
             !LegDatas[other][location].IsMoving; // Other side leg isn't currently moving
         if ( canmove )
         {
-            pos = MexPlore.RaycastToGround( pos );
+            Vector3 ground = MexPlore.RaycastToGround( pos );
 
-            // Start lerp
-            LegDatas[side][location].TargetPosition = pos;
-            StartCoroutine( MoveLeg( side, location, pos ) );
+            var ik = Legs[side].Legs[location].GetComponentInParent<InverseKinematics>();
+            float dist = Vector3.Distance( ik.transform.position, ground );
+            bool valid = ( dist <= ik.ArmLength );
+            if ( valid || force )
+            {
+                // Start lerp
+                LegDatas[side][location].TargetPosition = ground;
+                StartCoroutine( MoveLeg( side, location, ground ) );
 
-            LegDatas[side][location].LastMoved = Time.time;
-            LegDatas[side][location].NextToMove = false;
-            LegDatas[other][location].NextToMove = true;
+                LegDatas[side][location].LastMoved = Time.time;
+                LegDatas[side][location].NextToMove = false;
+                LegDatas[other][location].NextToMove = true;
+            }
         }
     }
 

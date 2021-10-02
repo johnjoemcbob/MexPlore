@@ -12,8 +12,13 @@ public class GrabHand : MonoBehaviour
 		{
 			TryPickup( other.gameObject );
 		}
+		if ( other.tag == "Building" )
+		{
+			TryPunch( other.GetComponentInParent<Building>() );
+		}
 	}
 
+	#region Hold
 	public void TryPickup( GameObject obj )
 	{
 		if ( Holding == null )
@@ -69,4 +74,17 @@ public class GrabHand : MonoBehaviour
 
 		GetComponentInParent<Arm>().OnDrop( obj );
 	}
+	#endregion
+
+	#region Punch
+	void TryPunch( Building building )
+	{
+		if ( GetComponentInParent<Arm>().Extended )
+		{
+			building.TakeDamage( MexPlore.DAMAGE_PUNCH, GetComponentInParent<MechBody>().transform.position );
+			StaticHelpers.GetOrCreateCachedPrefab( "Particle Effect", transform.position, transform.rotation, transform.lossyScale );
+			GetComponentInParent<Arm>().JustPunched = true;
+		}
+	}
+	#endregion
 }

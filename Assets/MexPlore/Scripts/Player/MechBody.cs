@@ -42,7 +42,11 @@ public class MechBody : MonoBehaviour
 		{
 			if ( RotateTowardsTarget )
 			{
-				Quaternion target = Quaternion.LookRotation( TargetDirection, Vector3.up );
+				Quaternion target = Quaternion.identity;
+				if ( TargetDirection != Vector3.zero )
+				{
+					target = Quaternion.LookRotation( TargetDirection, Vector3.up );
+				}
 				Quaternion start = transform.rotation;
 				transform.rotation = Quaternion.Lerp( transform.rotation, target, Time.deltaTime * RotateSpeed );
 				if ( TorsoLag )

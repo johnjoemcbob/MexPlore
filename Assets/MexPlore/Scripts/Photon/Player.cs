@@ -103,14 +103,7 @@ public class Player : MonoBehaviourPun
 	void SendDock( string mechname )
 	{
 		// Find local instance of the mech by name
-		MechBody mech = null;
-		foreach ( var trymech in FindObjectsOfType<MechBody>() )
-		{
-			if ( trymech.name == mechname )
-			{
-				mech = trymech;
-			}
-		}
+		MechBody mech = MexPlore.FindMechByName( mechname );
 		var dock = mech.GetComponentInChildren<MechCockpitDock>();
 
 		// Set this player as docked inside
@@ -127,17 +120,29 @@ public class Player : MonoBehaviourPun
 	void SendUnDock( string mechname )
 	{
 		// Find local instance of the mech by name
-		MechBody mech = null;
-		foreach ( var trymech in FindObjectsOfType<MechBody>() )
-		{
-			if ( trymech.name == mechname )
-			{
-				mech = trymech;
-			}
-		}
+		MechBody mech = MexPlore.FindMechByName( mechname );
 		var dock = mech.GetComponentInChildren<MechCockpitDock>();
 
 		// Set this player free
 		dock.UnDock();
+	}
+
+	public void Voice( MechVoice.VoiceInfo info )
+	{
+		string mechname = GetComponentInParent<MechBody>().name;
+
+		PhotonView.RPC( "SendVoice", RpcTarget.Others, mechname, info.Pitches, info.Delays );
+	}
+
+	[PunRPC]
+	void SendVoice( string mechname, float[] pitches, float[] delays )
+	{
+		var body = MexPlore.FindMechByName( mechname );
+		MechVoice.VoiceInfo info = new MechVoice.VoiceInfo();
+		{
+			info.Pitches = pitches;
+			info.Delays = delays;
+		}
+		body.GetComponentInChildren<MechVoice>().PlayVoice( info );
 	}
 }

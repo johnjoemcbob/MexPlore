@@ -57,7 +57,10 @@ public class MechCockpitDock : MonoBehaviour
 		// Stop the heli + dock
 		CanDock = false;
 		Cockpit.enabled = false;
-		Cockpit.GetComponent<Rigidbody>().isKinematic = true;
+		if ( Cockpit.GetComponent<Rigidbody>() != null )
+		{
+			Cockpit.GetComponent<Rigidbody>().isKinematic = true;
+		}
 		Cockpit.transform.SetParent( transform );
 		Cockpit.transform.localPosition = Vector3.zero;
 		Cockpit.transform.localEulerAngles = Vector3.zero;
@@ -74,7 +77,10 @@ public class MechCockpitDock : MonoBehaviour
 		Cockpit.GetComponent<Player>().Dock( this );
 
 		// Remove rigidbody
-		Destroy( Cockpit.GetComponent<Rigidbody>() );
+		if ( Cockpit.GetComponent<Rigidbody>() != null )
+		{
+			Destroy( Cockpit.GetComponent<Rigidbody>() );
+		}
 
 		// Visuals
 		GetComponentInChildren<MeshRenderer>().enabled = false;

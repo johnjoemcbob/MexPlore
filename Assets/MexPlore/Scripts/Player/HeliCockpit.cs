@@ -65,7 +65,11 @@ public class HeliCockpit : MonoBehaviour
         }
  
         // Turn rotor
-        Quaternion target = Quaternion.LookRotation( dir, Vector3.up );
+        Quaternion target = Quaternion.identity;
+        if ( dir != Vector3.zero )
+		{
+            target = Quaternion.LookRotation( dir, Vector3.up );
+        }
         Rotor.rotation = Quaternion.Lerp( Rotor.rotation, target, Time.deltaTime * RotorLerpSpeed );
 
         // Add blade spin speed with input
@@ -142,8 +146,12 @@ public class HeliCockpit : MonoBehaviour
 
     public void AddRigidbody()
 	{
-        var body = gameObject.AddComponent<Rigidbody>();
+        var body = gameObject.GetComponent<Rigidbody>();
         {
+            if ( body == null )
+			{
+                body = gameObject.AddComponent<Rigidbody>();
+            }
             body.mass = 1;
             body.drag = RigidDrag;
             body.angularDrag = RigidAngDrag;

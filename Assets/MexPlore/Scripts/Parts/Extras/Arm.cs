@@ -9,8 +9,14 @@ public class Arm : MonoBehaviour
     public float AboveHeadHeight = 6;
     public float EngineHeight = 2;
 
+    public AudioClip SoundExtend;
+
+    [HideInInspector]
+    public bool Extended = false;
+    [HideInInspector]
+    public bool JustPunched = false;
+
     private bool HasControl = true;
-    private bool Extended = false;
     private Vector3 DefaultHandPos;
     private GameObject HeldObject;
     private int AnimStep = 0;
@@ -34,10 +40,26 @@ public class Arm : MonoBehaviour
             {
                 button = MexPlore.CONTROL.BUTTON_ARM_RIGHT;
             }
-            Extended = Input.GetButton( MexPlore.GetControl( button ) );
+            bool extend = Input.GetButton( MexPlore.GetControl( button ) );
+            if ( Extended != extend && extend == true )
+			{
+                // New movement, play sound
+                StaticHelpers.GetOrCreateCachedAudioSource( SoundExtend, transform.position, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.MECH_ARM_EXTEND ) );
+            }
+            Extended = extend;
 
-            float extend = Extended ? ExtendLength : 0;
-            ik.TargetTarget.localPosition = DefaultHandPos + Vector3.right * extend;
+            // Retract when punched something, until let go of button
+            if ( !Extended )
+			{
+                JustPunched = false;
+            }
+            if ( JustPunched )
+			{
+                Extended = false;
+			}
+
+            float length = Extended ? ExtendLength : 0;
+            ik.TargetTarget.localPosition = DefaultHandPos + Vector3.right * length;
         }
 		else
         {

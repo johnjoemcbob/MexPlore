@@ -63,7 +63,7 @@ public class InverseKinematics : MonoBehaviour
 		UpdateArmLength();
 
 		// If there is a TargetTarget, then the normal target gets moved to this point at variable distance interval
-		if ( TargetTarget != null && PhysicsEnabled )
+		if ( TargetTarget != null && PhysicsEnabled && Application.isPlaying )
 		{
 			Vector3 pos = TargetTarget.position;
 
@@ -71,7 +71,7 @@ public class InverseKinematics : MonoBehaviour
 			if ( walker != null )
 			{
 				float dist = 0;
-				if ( IncrementalRaycasts && Application.isPlaying )
+				if ( IncrementalRaycasts )
 				{
 					int increments = 5;
 					for ( int i = 0; i < increments; i++ )
@@ -92,9 +92,12 @@ public class InverseKinematics : MonoBehaviour
 				}
 
 				dist = ( target.position - pos ).sqrMagnitude;
-				if ( dist > TargetMaxDistance )
+				float currentfootdist = ( hand.position - target.position ).sqrMagnitude;
+				float maxdist = ArmLength;
+				bool force = currentfootdist > maxdist;
+				if ( dist > TargetMaxDistance || force )
 				{
-					GetComponentInParent<WalkController>().TryMoveLeg( target, pos );
+					GetComponentInParent<WalkController>().TryMoveLeg( target, pos, force );
 				}
 			}
 			else

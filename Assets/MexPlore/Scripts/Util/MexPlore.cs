@@ -15,11 +15,16 @@ public static class MexPlore
         MECH_LEG_RAISE,
         MECH_LEG_LOWER,
         MECH_FOOTSTEP,
+        MECH_ARM_EXTEND,
 
         ENGINE_ON,
         ENGINE_LOOP,
         ENGINE_OFF,
         ENGINE_FUEL_CONSUME,
+
+        BUILDING_DAMAGE,
+        BUILDING_FALL,
+        BUILDING_HITGROUND,
 
         COUNT,
     }
@@ -47,11 +52,16 @@ public static class MexPlore
         Pitch[(int) SOUND.MECH_LEG_LOWER] = new Vector3( 1, 1, 0 );
         Volume[(int) SOUND.MECH_FOOTSTEP] = 0.5f;
         Pitch[(int) SOUND.MECH_FOOTSTEP] = new Vector3( 0.8f, 1.2f, 0.2f );
+        Volume[(int) SOUND.MECH_ARM_EXTEND] = 0.15f;
 
         Volume[(int) SOUND.ENGINE_ON] = 0.3f;
         Volume[(int) SOUND.ENGINE_LOOP] = 0.2f;
         Volume[(int) SOUND.ENGINE_OFF] = 0.3f;
         Volume[(int) SOUND.ENGINE_FUEL_CONSUME] = 1;
+
+        Volume[(int) SOUND.BUILDING_DAMAGE] = 0.5f;
+        Volume[(int) SOUND.BUILDING_FALL] = 1;
+        Volume[(int) SOUND.BUILDING_HITGROUND] = 0.75f;
     }
 
     public static float GetVolume( SOUND sound )
@@ -117,13 +127,18 @@ public static class MexPlore
         Control[(int) CONTROL.BUTTON_BRIDGE_EXTEND] = "Jump";
         Control[(int) CONTROL.BUTTON_CRAWL_CLAMP] = "Jump";
 
-        Control[(int) CONTROL.BUTTON_SPEAK] = "Submit";
+        Control[(int) CONTROL.BUTTON_SPEAK] = "Talk";
     }
 
     public static string GetControl( CONTROL control )
     {
         return Control[(int) control];
     }
+    #endregion
+
+    #region Static - OTHER
+    public const float DAMAGE_PUNCH = 2;
+    public const float DAMAGE_BUILDING_FALL = 1;
     #endregion
 
     #region Static - Gameplay Functions
@@ -230,6 +245,18 @@ public static class MexPlore
 
         Physics.SphereCast( start, radius, raydir, out hit, raydist, mask );
         return hit;
+    }
+
+    public static MechBody FindMechByName( string mechname )
+    {
+        foreach ( var trymech in GameObject.FindObjectsOfType<MechBody>() )
+        {
+            if ( trymech.name == mechname )
+            {
+                return trymech;
+            }
+        }
+        return null;
     }
     #endregion
 }
