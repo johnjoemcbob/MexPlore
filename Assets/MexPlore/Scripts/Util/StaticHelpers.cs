@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 
 public class StaticHelpers
 {
-	public const int POOL_AUDIO_MAX = 128;
-	public const int POOL_PREFAB_MAX = 24;
+	public const int POOL_AUDIO_MAX = 256;
+	public const int POOL_PREFAB_MAX = 48;
 
 	#region ==Variables
 	public static Dictionary<string, AudioClip> AudioClips = new Dictionary<string, AudioClip>();

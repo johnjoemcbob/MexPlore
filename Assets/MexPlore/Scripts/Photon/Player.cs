@@ -10,14 +10,28 @@ public class Player : MonoBehaviourPun
 	public string Name;
 	public float Scale = 1;
 
-	[Header( "References" )]
-	public Text NameTag;
+	[HideInInspector]
+	public string CrossoverMech;
 
 	private PhotonView PhotonView;
 
+	#region MonoBehaviour
 	void Awake()
     {
 		PhotonView = GetComponent<PhotonView>();
+	}
+
+	private void Start()
+	{
+		// Request sync from other players on late join
+		foreach ( var player in FindObjectsOfType<Player>() )
+		{
+			if ( player != this )
+			{
+				// Send every other player a request for their details from me
+				player.photonView.RPC( "RequestSync", RpcTarget.All, photonView.Owner );
+			}
+		}
 	}
 
 	private void OnDestroy()
@@ -28,25 +42,24 @@ public class Player : MonoBehaviourPun
 			body.GetComponentInChildren<MechCockpitDock>().UnDock( true );
 		}
 	}
+	#endregion
 
+	#region RPCs
+	// Callback for all current player to react to this new player
+	// Called in this instance on all network player machines
 	public void OnJoined()
 	{
 		// Request sync from other players on late join
-		PhotonView.RPC( "RequestSync", RpcTarget.Others, photonView.Owner );
-	}
-
-	public void SetName( string name )
-	{
-		Name = name;
-		NameTag.text = "";
-
-		PhotonView.RPC( "SendName", RpcTarget.Others, name );
-	}
-
-	[PunRPC]
-	void SendName( string name )
-	{
-		Name = name;
+		//Debug.Log( "I'm late!! " + name );
+		//foreach ( var player in FindObjectsOfType<Player>() )
+		//{
+		//	if ( player != this )
+		//	{
+		//		// Send every other player a request for their details from me
+		//		player.photonView.RPC( "RequestSync", RpcTarget.All, photonView.Owner );
+		//		Debug.Log( "Requesting sync from player; " + player.name );
+		//	}
+		//}
 	}
 
 	[PunRPC]
@@ -54,8 +67,12 @@ public class Player : MonoBehaviourPun
 	{
 		PhotonView view = LocalPlayer.Instance.Player.photonView;
 
-		// Send my name directly back to the player who requested the info
-		view.RPC( "SendName", sendto, Name );
+		// Create any new mechs as needed
+		if ( CrossoverMech != "" )
+		{
+			view.RPC( "SendCrossoverMech", sendto, CrossoverMech, SystemInfo.deviceUniqueIdentifier );
+		}
+
 		// Sync self mech in inside one
 		var body = LocalPlayer.Instance.Player.GetComponentInParent<MechBody>();
 		if ( body != null )
@@ -75,6 +92,47 @@ public class Player : MonoBehaviourPun
 				}
 			}
 		}
+
+		// Fallen buildings are synced by all
+		foreach ( var building in FindObjectsOfType<Building>() )
+		{
+			if ( building.Fallen )
+			{
+				view.RPC( "SendBuildingFallen", sendto, building.name, building.FallPos );
+			}
+		}
+	}
+
+	public void LeaveRoom()
+	{
+		var body = transform.GetComponentInParent<MechBody>();
+		if ( body != null )
+		{
+			string mechname = body.name;
+			PhotonView.RPC( "SendRemoveMech", RpcTarget.Others, mechname );
+		}
+	}
+
+	[PunRPC]
+	void SendRemoveMech( string mechname )
+	{
+		// Find local instance of the mech by name
+		MechBody mech = null;
+		foreach ( var trymech in FindObjectsOfType<MechBody>() )
+		{
+			if ( trymech.name == mechname )
+			{
+				mech = trymech;
+			}
+		}
+		Destroy( mech.gameObject );
+	}
+
+
+	[PunRPC]
+	void SendCrossoverMech( string crossovermech, string id )
+	{
+		Game.Instance.CreateCrossoverMech( crossovermech, id );
 	}
 
 	[PunRPC]
@@ -102,12 +160,27 @@ public class Player : MonoBehaviourPun
 	[PunRPC]
 	void SendDock( string mechname )
 	{
+		StartCoroutine( TryDock( mechname ) );
+	}
+
+	IEnumerator TryDock( string mechname )
+	{
 		// Find local instance of the mech by name
 		MechBody mech = MexPlore.FindMechByName( mechname );
-		var dock = mech.GetComponentInChildren<MechCockpitDock>();
+		if ( mech != null )
+		{
+			var dock = mech.GetComponentInChildren<MechCockpitDock>();
 
-		// Set this player as docked inside
-		dock.Dock( GetComponent<HeliCockpit>() );
+			// Set this player as docked inside
+			dock.Dock( GetComponent<HeliCockpit>(), true );
+		}
+		else
+		{
+			yield return new WaitForSeconds( 0.5f );
+
+			StartCoroutine( TryDock( mechname ) );
+		}
+		yield break;
 	}
 
 	public void UnDock( MechCockpitDock dock )
@@ -124,7 +197,7 @@ public class Player : MonoBehaviourPun
 		var dock = mech.GetComponentInChildren<MechCockpitDock>();
 
 		// Set this player free
-		dock.UnDock();
+		dock.UnDock( false, true );
 	}
 
 	public void Voice( MechVoice.VoiceInfo info )
@@ -145,4 +218,23 @@ public class Player : MonoBehaviourPun
 		}
 		body.GetComponentInChildren<MechVoice>().PlayVoice( info );
 	}
+
+	public void KnockBuilding( string buildingname, Vector3 dmgpos )
+	{
+		PhotonView.RPC( "SendKnockBuilding", RpcTarget.Others, buildingname, dmgpos );
+	}
+
+	[PunRPC]
+	void SendKnockBuilding( string buildingname, Vector3 dmgpos )
+	{
+		Building.FindByName( buildingname ).NetworkFall( dmgpos );
+	}
+
+	[PunRPC]
+	void SendBuildingFallen( string buildingname, Vector3 dmgpos )
+	{
+		Building.FindByName( buildingname ).NetworkFall( dmgpos, true );
+	}
+
+	#endregion
 }

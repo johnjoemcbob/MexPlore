@@ -76,6 +76,9 @@ public class OrbitCamera : MonoBehaviour
 
 	void LateUpdate()
 	{
+		if ( focus == null ) return;
+		if ( LocalPlayer.Instance == null || LocalPlayer.Instance.CurrentState == LocalPlayer.State.UI ) return;
+
 		distance += Input.mouseScrollDelta.y * ScrollSpeed;
 
 		UpdateFocusPoint();
@@ -139,8 +142,8 @@ public class OrbitCamera : MonoBehaviour
 	bool ManualRotation()
 	{
 		Vector2 input = new Vector2(
-			Input.GetAxis("Mouse Y") * -1,
-			Input.GetAxis("Mouse X") * 1
+			Input.GetAxis("Mouse Y") * -1 * MexPlore.MouseSensitivity,
+			Input.GetAxis("Mouse X") * 1 * MexPlore.MouseSensitivity
 		);
 		const float e = 0.001f;
 		if ( input.x < -e || input.x > e || input.y < -e || input.y > e )

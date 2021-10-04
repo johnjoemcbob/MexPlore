@@ -11,12 +11,23 @@ public class Building : MonoBehaviour
 	public AudioClip SoundFall;
 	public AudioClip SoundHitGround;
 
-	private bool Fallen = false;
+	[HideInInspector]
+	public bool Fallen = false;
+	[HideInInspector]
+	public Vector3 FallPos;
+	[HideInInspector]
+	public bool Idle = false;
 
-    void Start()
+
+	void Start()
     {
 		// Apply tags and layers to all children
 		Recurse( transform );
+
+		// Auto name it the same for every client, for syncing purposes
+		var points = 2;
+		var mult = points * 10;
+		name += "_" + ( Mathf.Round( transform.position.x * mult ) / mult ) + "_" + ( Mathf.Round( transform.position.z * mult ) / mult );
     }
 
 	void Recurse( Transform trans )
@@ -44,9 +55,10 @@ public class Building : MonoBehaviour
 		StaticHelpers.GetOrCreateCachedAudioSource( SoundDamage, dmgpos, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.BUILDING_DAMAGE ) );
 	}
 
-	IEnumerator FallDown( Vector3 dmgpos )
+	IEnumerator FallDown( Vector3 dmgpos, bool network = false, bool immediate = false )
 	{
 		Fallen = true;
+		FallPos = dmgpos;
 
 		// Turn all colliders to triggers
 		foreach ( var collider in GetComponentsInChildren<Collider>() )
@@ -58,8 +70,11 @@ public class Building : MonoBehaviour
 		var body = gameObject.AddComponent<Rigidbody>();
 		body.isKinematic = true;
 
-		// SFX
-		StaticHelpers.GetOrCreateCachedAudioSource( SoundFall, dmgpos, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.BUILDING_FALL ) );
+		if ( !immediate )
+		{
+			// SFX
+			StaticHelpers.GetOrCreateCachedAudioSource( SoundFall, dmgpos, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.BUILDING_FALL ) );
+		}
 
 		// Fall away from player
 		Vector3 dir = ( dmgpos - transform.position ).normalized;
@@ -68,6 +83,10 @@ public class Building : MonoBehaviour
 		Quaternion start = Quaternion.LookRotation( startang );
 		Quaternion target = Quaternion.AngleAxis( 90, right );
 		float progress = 0;
+			if ( immediate )
+			{
+				progress = 1;
+			}
 		while ( progress <= 1 )
 		{
 			Quaternion current = Quaternion.Lerp( start, target, Mathf.Clamp( progress, 0, 1 ) );
@@ -76,29 +95,53 @@ public class Building : MonoBehaviour
 			yield return new WaitForEndOfFrame();
 		}
 
-		// VFX
-		foreach ( var particle in GetComponentsInChildren<ParticleSystem>() )
+		if ( !immediate )
 		{
-			particle.Play();
+			// VFX
+			foreach ( var particle in GetComponentsInChildren<ParticleSystem>() )
+			{
+				particle.Play();
+			}
+
+			// SFX
+			StaticHelpers.GetOrCreateCachedAudioSource( SoundHitGround, dmgpos, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.BUILDING_HITGROUND ) );
 		}
 
-		// SFX
-		StaticHelpers.GetOrCreateCachedAudioSource( SoundHitGround, dmgpos, Random.Range( 0.9f, 1.1f ), MexPlore.GetVolume( MexPlore.SOUND.BUILDING_HITGROUND ) );
+		// Network
+		if ( !network )
+		{
+			LocalPlayer.Instance.Player.KnockBuilding( name, dmgpos );
+		}
 
-		// Then fade into ground
-		//while ( above ground )
-		//{
-
-		//}
+		Idle = true;
 
 		yield break;
 	}
 
 	private void OnTriggerEnter( Collider other )
 	{
+		if ( Idle ) return;
+
 		if ( other.tag == "Building" )
 		{
 			other.GetComponentInParent<Building>().TakeDamage( MexPlore.DAMAGE_BUILDING_FALL, transform.position );
 		}
+	}
+
+	public void NetworkFall( Vector3 dmgpos, bool immediate = false )
+	{
+		if ( Fallen ) return;
+
+		StartCoroutine( FallDown( dmgpos, true, immediate ) );
+	}
+
+	public static Building FindByName( string buildingname )
+	{
+		var obj = GameObject.Find( buildingname );
+		if ( obj != null )
+		{
+			return obj.GetComponent<Building>();
+		}
+		return null;
 	}
 }

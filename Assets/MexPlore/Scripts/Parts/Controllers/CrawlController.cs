@@ -36,17 +36,17 @@ public class CrawlController : BaseController
 
         bool hover = false;
         bool raycast = true;
-        if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CRAWL_CLAMP ) ) )
+        if ( LocalPlayer.CanInput() && Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CRAWL_CLAMP ) ) )
         {
             FreezePos = Body.transform.position;
             FreezeHandPos = HandTarget.transform.position;
 
             if ( SoundGrab != null )
-			{
+            {
                 AudioSource.PlayClipAtPoint( SoundGrab, transform.position );
-			}
+            }
         }
-        if ( Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CRAWL_CLAMP ) ) )
+        if ( LocalPlayer.CanInput() && Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CRAWL_CLAMP ) ) )
         {
             // Freeze the hand, instead move the body towards the distance
             Body.GetComponent<MechBody>().SetTargetPos( FreezePos + ( FreezeHandPos - Body.transform.position ) * ( 1 - dir.magnitude ) );

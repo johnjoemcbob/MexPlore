@@ -113,8 +113,8 @@ public class MechBody : MonoBehaviour
 
 	public void OnUnDock()
 	{
-		Vector3 ground = MexPlore.RaycastToGround( transform.position );
-		TargetPos = ground + Vector3.up * OfflineGroundHeight;
+		//Vector3 ground = MexPlore.RaycastToGround( transform.position );
+		//TargetPos = ground + Vector3.up * OfflineGroundHeight;
 
 		foreach ( var collider in GetComponentsInChildren<Collider>() )
 		{

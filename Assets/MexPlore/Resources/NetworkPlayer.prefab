@@ -66,7 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Scale: 1
-  NameTag: {fileID: 0}
+  CrossoverMech: 
 --- !u!1001 &3644928964804914748
 PrefabInstance:
   m_ObjectHideFlags: 0

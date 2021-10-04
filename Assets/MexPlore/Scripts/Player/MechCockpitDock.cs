@@ -15,7 +15,7 @@ public class MechCockpitDock : MonoBehaviour
 
 	private void Update()
 	{
-		if ( Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_UNDOCK ) ) )
+		if ( LocalPlayer.CanInput() && Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_UNDOCK ) ) )
 		{
 			if ( Cockpit != null && LocalPlayer.Instance.Player == Cockpit.GetComponent<Player>() )
 			{
@@ -50,7 +50,7 @@ public class MechCockpitDock : MonoBehaviour
 		}
 	}
 
-	public void Dock( HeliCockpit cockpit )
+	public void Dock( HeliCockpit cockpit, bool networked = false )
 	{
 		Cockpit = cockpit;
 
@@ -74,7 +74,10 @@ public class MechCockpitDock : MonoBehaviour
 		}
 
 		// Network
-		Cockpit.GetComponent<Player>().Dock( this );
+		if ( !networked )
+		{
+			Cockpit.GetComponent<Player>().Dock( this );
+		}
 
 		// Remove rigidbody
 		if ( Cockpit.GetComponent<Rigidbody>() != null )
@@ -96,7 +99,7 @@ public class MechCockpitDock : MonoBehaviour
 		}
 	}
 
-	public void UnDock( bool destroy = false )
+	public void UnDock( bool destroy = false, bool networked = false )
 	{
 		if ( Cockpit == null ) return; // Might be null if joined late and error?
 
@@ -127,7 +130,7 @@ public class MechCockpitDock : MonoBehaviour
 		}
 
 		// Network
-		if ( !destroy )
+		if ( !networked && !destroy )
 		{
 			Cockpit.GetComponent<Player>().UnDock( this );
 		}

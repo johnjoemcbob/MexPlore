@@ -29,7 +29,7 @@ public class IncrediMech : MechBody
 		if ( !IsMainController ) return;
 
 		// Toggle button
-		if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_MECH_FOLD ) ) )
+		if ( LocalPlayer.CanInput() && Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_MECH_FOLD ) ) )
 		{
 			ToggleState();
 		}

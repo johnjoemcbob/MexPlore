@@ -40,7 +40,7 @@ public class Arm : MonoBehaviour
             {
                 button = MexPlore.CONTROL.BUTTON_ARM_RIGHT;
             }
-            bool extend = Input.GetButton( MexPlore.GetControl( button ) );
+            bool extend = LocalPlayer.CanInput() && Input.GetButton( MexPlore.GetControl( button ) );
             if ( Extended != extend && extend == true )
 			{
                 // New movement, play sound

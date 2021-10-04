@@ -32,11 +32,14 @@ public class HeliCockpit : MonoBehaviour
     private float CurrentVisualBladeSpeed = 0;
     private ParticleSystem Particles;
 
-    private void Start()
+	private void Awake()
+    {
+        Particles = GetComponentInChildren<ParticleSystem>();
+    }
+
+	private void Start()
 	{
         AddRigidbody();
-
-        Particles = GetComponentInChildren<ParticleSystem>();
     }
 
 	void FixedUpdate()
@@ -48,10 +51,14 @@ public class HeliCockpit : MonoBehaviour
         Vector3 dir = Vector3.zero;
             if ( islocal )
             {
-                thrust = Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_THRUST ) );
+                thrust = LocalPlayer.CanInput() && Input.GetButton( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_HELI_THRUST ) );
                 dir = MexPlore.GetCameraDirectionalInput().normalized;
             }
-        Vector3 vel = GetComponent<Rigidbody>().velocity;
+        Vector3 vel = Vector3.zero;
+            if ( GetComponent<Rigidbody>() != null )
+		    {
+                vel = GetComponent<Rigidbody>().velocity;
+            }
         if ( dir != Vector3.zero )
         {
             //dir = LastDirection;

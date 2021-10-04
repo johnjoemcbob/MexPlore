@@ -62,6 +62,8 @@ public static class MexPlore
         Volume[(int) SOUND.BUILDING_DAMAGE] = 0.5f;
         Volume[(int) SOUND.BUILDING_FALL] = 1;
         Volume[(int) SOUND.BUILDING_HITGROUND] = 0.75f;
+
+        AudioListener.volume = 0.5f;
     }
 
     public static float GetVolume( SOUND sound )
@@ -103,6 +105,7 @@ public static class MexPlore
     }
 
     public static string[] Control;
+    public static float MouseSensitivity = 0.5f;
 
     public static void InitControls()
     {
@@ -143,14 +146,19 @@ public static class MexPlore
 
     #region Static - Gameplay Functions
     public const float CAST_RAY_UP = 10;
-    public const float CAST_RAY_DIST = 1000;
+    public const float CAST_RAY_DIST = 100000;
 
     public const float CAST_SPHERE_RADIUS = 1;
     public const float CAST_SPHERE_UP = 10;
-    public const float CAST_SPHERE_DIST = 1000;
+    public const float CAST_SPHERE_DIST = 100000;
 
     public static Vector3 GetCameraDirectionalInput()
     {
+        if ( LocalPlayer.Instance == null || LocalPlayer.Instance.CurrentState == LocalPlayer.State.UI )
+        {
+            return Vector3.zero;
+        }
+
         // Camera
         Vector3 forward = Camera.main.transform.forward;
         forward.y = 0;

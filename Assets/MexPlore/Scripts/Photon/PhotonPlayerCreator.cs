@@ -13,12 +13,17 @@ public class PhotonPlayerCreator : MonoBehaviourPun
 
     void CreatePlayerObject()
     {
-        GameObject newPlayerObject = PhotonNetwork.Instantiate( "NetworkPlayer", Spawn, Quaternion.identity, 0 );
+		// Find or default spawn position
+		Vector3 spawn = GetSpawn();
+
+		// Create
+        GameObject newPlayerObject = PhotonNetwork.Instantiate( "NetworkPlayer", spawn, Quaternion.identity, 0 );
 		if ( LocalPlayer.Instance.Player == null )
 		{
 			LocalPlayer.Instance.Player = newPlayerObject.GetComponentInChildren<Player>();
-			LocalPlayer.Instance.Player.OnJoined();
 			LocalPlayer.Instance.OnSpawn();
+
+			Game.Instance.OnPlayerSpawnLoadCrossoverMech();
 
 			if ( !Application.isEditor )
 			{
@@ -26,15 +31,22 @@ public class PhotonPlayerCreator : MonoBehaviourPun
 			}
 		}
 
-		//Camera.Target = newPlayerObject.transform;
-		//var character = FindObjectOfType<NaughtyCharacter.Character>( true );
-		//character._characterController = newPlayerObject.GetComponentInChildren<CharacterController>( true );
-		//character._characterAnimator = newPlayerObject.GetComponentInChildren<NaughtyCharacter.CharacterAnimator>( true );
-		//newPlayerObject.GetComponentInChildren<NaughtyCharacter.CharacterAnimator>( true )._character = character;
-		//character.transform.SetParent( newPlayerObject.transform );
-		//character.transform.localPosition = Vector3.zero;
+		// Callback for all current player to react to this new player
+		newPlayerObject.GetComponentInChildren<Player>().OnJoined();
 	}
 
+	public static Vector3 GetSpawn()
+	{
+		var spawn = Spawn;
+		var point = GameObject.Find( "SpawnPoint" );
+		if ( point != null )
+		{
+			spawn = point.transform.position;
+		}
+		return Spawn;
+	}
+
+	// Join alert notification
 	IEnumerator SendDiscord()
 	{
 		WWWForm form = new WWWForm();

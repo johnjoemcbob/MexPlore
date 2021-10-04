@@ -29,7 +29,7 @@ public class MechVoice : MonoBehaviour
         var body = GetComponentInParent<MechBody>();
         if ( body != null && body.IsMainController )
 		{
-            if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_SPEAK ) ) && Coroutine == null )
+            if ( LocalPlayer.CanInput() && Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_SPEAK ) ) && Coroutine == null )
             {
                 var info = GetVoiceInfo();
                 PlayVoice( info );

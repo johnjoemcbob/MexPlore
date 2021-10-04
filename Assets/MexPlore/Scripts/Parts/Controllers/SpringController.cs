@@ -46,7 +46,7 @@ public class SpringController : BaseController
             Knee.position = Body.transform.position - dir * 10;
 
             // Space launches in that direction, disables iskinematic
-            if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_MECH_JUMP ) ) )
+            if ( LocalPlayer.CanInput() && Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_MECH_JUMP ) ) )
             {
                 Body.GetComponent<Rigidbody>().isKinematic = false;
                 Body.GetComponent<Rigidbody>().AddForce( dir * SpringForce + Vector3.up * SpringUpForce, ForceMode.Impulse );

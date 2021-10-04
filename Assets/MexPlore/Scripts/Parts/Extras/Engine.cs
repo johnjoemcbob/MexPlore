@@ -20,10 +20,14 @@ public class Engine : MonoBehaviour
 
     private bool On = false;
 
-    void Start()
+	private void Awake()
+    {
+        Source = GetComponent<AudioSource>();
+    }
+
+	void Start()
     {
         // AudioSource attached is engine loop
-        Source = GetComponent<AudioSource>();
         Source.clip = SoundEngineLoop;
         Source.volume = MexPlore.GetVolume( MexPlore.SOUND.ENGINE_LOOP );
 
