@@ -16,6 +16,11 @@ public class MechColourScheme : MonoBehaviour
 
 	void Start()
     {
+		Apply();
+    }
+
+	public void Apply()
+	{
 		foreach ( var renderer in GetComponentsInChildren<MeshRenderer>() )
 		{
 			for ( int ind = 0; ind < renderer.materials.Length; ind++ )
@@ -34,5 +39,5 @@ public class MechColourScheme : MonoBehaviour
 				}
 			}
 		}
-    }
+	}
 }

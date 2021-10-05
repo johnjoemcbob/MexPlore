@@ -29,6 +29,7 @@ public static class MexPlore
         COUNT,
     }
 
+    public static float GlobalVolume = 0.5f;
     public static float[] Volume;
     public static Vector3[] Pitch;
 
@@ -63,7 +64,7 @@ public static class MexPlore
         Volume[(int) SOUND.BUILDING_FALL] = 1;
         Volume[(int) SOUND.BUILDING_HITGROUND] = 0.75f;
 
-        AudioListener.volume = 0.5f;
+        AudioListener.volume = GlobalVolume;
     }
 
     public static float GetVolume( SOUND sound )
@@ -179,6 +180,44 @@ public static class MexPlore
             }
         }
         return dir;
+    }
+
+    public static Vector3 GetCameraVerticalInput()
+    {
+        if ( LocalPlayer.Instance == null || LocalPlayer.Instance.CurrentState == LocalPlayer.State.UI )
+        {
+            return Vector3.zero;
+        }
+
+        // Camera
+        Vector3 forward = Camera.main.transform.forward;
+        forward.y = 0;
+
+        // Input
+        var ver = Input.GetAxis( GetControl( CONTROL.AXIS_FORWARD ) );
+
+        // Together
+        Vector3 dir = forward * ver;
+        return dir.normalized;
+    }
+
+    public static Vector3 GetCameraHorizontalInput()
+    {
+        if ( LocalPlayer.Instance == null || LocalPlayer.Instance.CurrentState == LocalPlayer.State.UI )
+        {
+            return Vector3.zero;
+        }
+
+        // Camera
+        Vector3 right = Camera.main.transform.right;
+        right.y = 0;
+
+        // Input
+        var hor = Input.GetAxis( GetControl( CONTROL.AXIS_RIGHT ) );
+
+        // Together
+        Vector3 dir = right * hor;
+        return dir.normalized;
     }
 
     public static Vector3 RaycastToGround( Vector3 pos )

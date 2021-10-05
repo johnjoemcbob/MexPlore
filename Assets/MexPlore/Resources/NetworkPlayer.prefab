@@ -67,6 +67,7 @@ MonoBehaviour:
   Name: 
   Scale: 1
   CrossoverMech: 
+  CrossoverMaterial: 0
 --- !u!1001 &3644928964804914748
 PrefabInstance:
   m_ObjectHideFlags: 0

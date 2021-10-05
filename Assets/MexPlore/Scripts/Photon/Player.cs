@@ -12,6 +12,8 @@ public class Player : MonoBehaviourPun
 
 	[HideInInspector]
 	public string CrossoverMech;
+	[HideInInspector]
+	public int CrossoverMaterial;
 
 	private PhotonView PhotonView;
 
@@ -70,7 +72,7 @@ public class Player : MonoBehaviourPun
 		// Create any new mechs as needed
 		if ( CrossoverMech != "" )
 		{
-			view.RPC( "SendCrossoverMech", sendto, CrossoverMech, SystemInfo.deviceUniqueIdentifier );
+			view.RPC( "SendCrossoverMech", sendto, CrossoverMech, CrossoverMaterial, SystemInfo.deviceUniqueIdentifier );
 		}
 
 		// Sync self mech in inside one
@@ -130,9 +132,9 @@ public class Player : MonoBehaviourPun
 
 
 	[PunRPC]
-	void SendCrossoverMech( string crossovermech, string id )
+	void SendCrossoverMech( string crossovermech, int material, string id )
 	{
-		Game.Instance.CreateCrossoverMech( crossovermech, id );
+		Game.Instance.CreateCrossoverMech( crossovermech, material, id );
 	}
 
 	[PunRPC]

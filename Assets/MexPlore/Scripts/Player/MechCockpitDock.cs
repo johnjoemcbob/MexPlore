@@ -62,6 +62,7 @@ public class MechCockpitDock : MonoBehaviour
 			Cockpit.GetComponent<Rigidbody>().isKinematic = true;
 		}
 		Cockpit.transform.SetParent( transform );
+		GetComponentInParent<MechHighlight>().Apply(); // Apply the mech's colour to the heli
 		Cockpit.transform.localPosition = Vector3.zero;
 		Cockpit.transform.localEulerAngles = Vector3.zero;
 
@@ -92,10 +93,11 @@ public class MechCockpitDock : MonoBehaviour
 		if ( LocalPlayer.Instance.Player == Cockpit.GetComponent<Player>() )
 		{
 			GetComponentInParent<MechBody>().IsMainController = true;
-			foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
-			{
-				controller.IsMainController = true;
-			}
+
+			// Walkers need to store the current body pos
+			GetComponentInParent<MechBody>().SetTargetPos( GetComponentInParent<MechBody>().transform.position );
+
+			GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>()[0].IsMainController = true;
 		}
 	}
 
@@ -140,10 +142,7 @@ public class MechCockpitDock : MonoBehaviour
 
 		// Disable mech controls
 		GetComponentInParent<MechBody>().IsMainController = false;
-		foreach ( var controller in GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>() )
-		{
-			controller.IsMainController = false;
-		}
+		GetComponentInParent<MechBody>().GetComponentsInChildren<BaseController>()[0].IsMainController = false;
 
 		Cockpit = null;
 	}

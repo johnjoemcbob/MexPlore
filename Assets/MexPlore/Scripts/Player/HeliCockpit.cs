@@ -26,6 +26,7 @@ public class HeliCockpit : MonoBehaviour
     [Header( "Assets" )]
     public AudioClip SoundDock;
     public AudioClip SoundUnDock;
+    public Material DefaultHighlight;
 
     private Vector3 LastDirection = Vector3.zero;
     private float CurrentBladeSpeed = 0;
@@ -180,6 +181,19 @@ public class HeliCockpit : MonoBehaviour
     public void OnUnDock()
     {
         Particles.gameObject.SetActive( true );
+
+		foreach ( var renderer in GetComponentsInChildren<Renderer>() )
+		{
+			for ( int i = 0; i < renderer.materials.Length; i++ )
+			{
+                if ( renderer.materials[i].name.Contains( "Highlight" ) )
+				{
+                    var mats = renderer.materials;
+                    mats[i] = DefaultHighlight;
+                    renderer.materials = mats;
+                }
+			}
+		}
 
         StaticHelpers.GetOrCreateCachedAudioSource( SoundUnDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_UNDOCK ) );
     }

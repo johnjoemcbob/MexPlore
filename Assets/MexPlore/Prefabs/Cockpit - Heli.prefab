@@ -278,6 +278,7 @@ MonoBehaviour:
   - {fileID: 3007420063844328232}
   SoundDock: {fileID: 8300000, guid: 0928ab080db86094d8fd54fc12204b22, type: 3}
   SoundUnDock: {fileID: 8300000, guid: 863423c1040c0c54d9c23099fe685506, type: 3}
+  DefaultHighlight: {fileID: 2100000, guid: 222f21bcb827c4d42bc276e958d5440d, type: 2}
 --- !u!82 &6737633655638007139
 AudioSource:
   m_ObjectHideFlags: 0

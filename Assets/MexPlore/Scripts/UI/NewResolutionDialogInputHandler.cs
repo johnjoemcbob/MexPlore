@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using NewResolutionDialog.Scripts;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 0649
 
@@ -31,6 +32,8 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	private Canvas dialogCanvas;
 	public GameObject Dialog;
 	public GameObject QuitButton;
+	public Slider VolumeSlider;
+	public Slider SensitivitySlider;
 
 	[SerializeField]
 	private KeyCode popupKeyCode = KeyCode.Escape;
@@ -59,7 +62,16 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	{
 		while ( true )
 		{
-			yield return new WaitUntil( () => Input.GetKeyDown( popupKeyCode ) || ( ( Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor ) && Input.GetKeyUp( KeyCode.Escape ) ) );
+			yield return new WaitUntil( () =>
+				Input.GetKeyDown( popupKeyCode ) ||
+				(
+					//(
+					//	Application.platform == RuntimePlatform.WindowsPlayer ||
+					//	Application.platform == RuntimePlatform.WindowsEditor
+					//) &&
+					Input.GetKeyUp( KeyCode.Escape )
+				)
+			);
 
 			if ( !DontOpen && ( LocalPlayer.Instance.CurrentState == LocalPlayer.State.Movement || dialogCanvas.enabled ) )
 			{
@@ -85,6 +97,8 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 		{
 			dialogCanvas.enabled = true;
 			QuitButton.SetActive( Application.platform != RuntimePlatform.WebGLPlayer );
+			VolumeSlider.value = MexPlore.GlobalVolume;
+			SensitivitySlider.value = MexPlore.MouseSensitivity;
 			if ( LocalPlayer.Instance != null )
 			{
 				LocalPlayer.Instance.SwitchState( LocalPlayer.State.UI );
@@ -107,6 +121,12 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 		LocalPlayer.Instance.SwitchState( LocalPlayer.State.Movement );
 
 		Dialog.SetActive( dialogCanvas.enabled );
+	}
+
+	public void UpdateVolumeSlider( float value )
+	{
+		AudioListener.volume = value;
+		MexPlore.GlobalVolume = value;
 	}
 
 	public void UpdateSensitivitySlider( float value )

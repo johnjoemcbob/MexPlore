@@ -15,6 +15,7 @@ public class MechBody : MonoBehaviour
 	public float TorsoLagSpeed = 1;
 	public float OfflineGroundHeight = 1;
 	public float PosLerpSpeed = 5;
+	public bool ChangePhysicsLayersOnDock = true;
 
 	[Header( "Base - References" )]
 	public Transform Torso;
@@ -34,6 +35,7 @@ public class MechBody : MonoBehaviour
 			TorsoRotation = Torso.rotation;
 		}
 		TargetPos = transform.position;
+		TargetDirection = transform.forward;
 	}
 
 	public virtual void Update()
@@ -72,11 +74,15 @@ public class MechBody : MonoBehaviour
 		}
 
 		// Always lerp to target pos
-		if ( GetComponent<Rigidbody>().isKinematic )
+		if ( GetComponent<Rigidbody>().isKinematic && TargetPos != Vector3.zero )
 		{
 			//float dist = Mathf.Max( 1, Vector3.Distance( transform.position, TargetPos ) );
 			//transform.position = Vector3.Lerp( transform.position, TargetPos, Time.deltaTime * PosLerpSpeed * dist );
-			transform.position = TargetPos;
+			transform.localPosition = TargetPos;
+			if ( Vector3.Distance( transform.localPosition, TargetPos ) < 0.1f )
+			{
+				TargetPos = Vector3.zero;
+			}
 		}
 	}
 
@@ -90,7 +96,7 @@ public class MechBody : MonoBehaviour
 
 	public void SetTargetPos( Vector3 pos )
 	{
-		TargetPos = pos;
+		TargetPos = transform.parent.InverseTransformPoint( pos );
 	}
 
 	public void SetTargetDirection( Vector3 dir )
@@ -98,16 +104,30 @@ public class MechBody : MonoBehaviour
 		TargetDirection = dir;
 	}
 
+	public void SetParent( Transform parent )
+	{
+		if ( transform.parent != parent ) //&& !parent.name.Contains( "errain" ) )
+		{
+			Vector3 pos = transform.position;
+			transform.SetParent( parent );
+			transform.position = pos;
+			SetTargetPos( pos );
+		}
+	}
+
 	public void OnDock()
 	{
-		OldLayers.Clear();
-		foreach ( var collider in GetComponentsInChildren<Collider>() )
+		if ( ChangePhysicsLayersOnDock )
 		{
-			if ( !OldLayers.ContainsKey( collider.name ) )
+			OldLayers.Clear();
+			foreach ( var collider in GetComponentsInChildren<Collider>() )
 			{
-				OldLayers.Add( collider.name, collider.gameObject.layer );
+				if ( !OldLayers.ContainsKey( collider.name ) )
+				{
+					OldLayers.Add( collider.name, collider.gameObject.layer );
+				}
+				collider.gameObject.layer = LayerMask.NameToLayer( "Self" );
 			}
-			collider.gameObject.layer = LayerMask.NameToLayer( "Self" );
 		}
 	}
 
@@ -116,10 +136,13 @@ public class MechBody : MonoBehaviour
 		//Vector3 ground = MexPlore.RaycastToGround( transform.position );
 		//TargetPos = ground + Vector3.up * OfflineGroundHeight;
 
-		foreach ( var collider in GetComponentsInChildren<Collider>() )
+		if ( ChangePhysicsLayersOnDock )
 		{
-			collider.gameObject.layer = OldLayers[collider.name];
+			foreach ( var collider in GetComponentsInChildren<Collider>() )
+			{
+				collider.gameObject.layer = OldLayers[collider.name];
+			}
+			OldLayers.Clear();
 		}
-		OldLayers.Clear();
 	}
 }

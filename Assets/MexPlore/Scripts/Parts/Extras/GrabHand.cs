@@ -18,6 +18,14 @@ public class GrabHand : MonoBehaviour
 		}
 	}
 
+	private void OnTriggerStay( Collider other )
+	{
+		if ( other.tag == "Building" )
+		{
+			TryPunch( other.GetComponentInParent<Building>() );
+		}
+	}
+
 	#region Hold
 	public void TryPickup( GameObject obj )
 	{
@@ -79,7 +87,7 @@ public class GrabHand : MonoBehaviour
 	#region Punch
 	void TryPunch( Building building )
 	{
-		if ( GetComponentInParent<Arm>().Extended )
+		if ( GetComponentInParent<Arm>().Extended && !GetComponentInParent<Arm>().JustPunched )
 		{
 			building.TakeDamage( MexPlore.DAMAGE_PUNCH, GetComponentInParent<MechBody>().transform.position );
 			StaticHelpers.GetOrCreateCachedPrefab( "Particle Effect", transform.position, transform.rotation, transform.lossyScale );

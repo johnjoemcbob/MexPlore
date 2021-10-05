@@ -643,9 +643,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 435675658767971252}
-        m_TargetAssemblyTypeName: NewResolutionDialog.Scripts.Controller.GraphicSettingsHandler,
-          NewResolutionDialog
+      - m_Target: {fileID: 5891141346371251549}
+        m_TargetAssemblyTypeName: NewResolutionDialogInputHandler, Assembly-CSharp
         m_MethodName: UpdateVolumeSlider
         m_Mode: 0
         m_Arguments:
@@ -4400,7 +4399,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4187176589029327094}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e9041e4ee72e564bb56fa874188b67b, type: 3}
+  m_Script: {fileID: 11500000, guid: d24f34f54df37e143b5305da029365a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogStyle: 1
@@ -4420,6 +4419,8 @@ MonoBehaviour:
   dialogCanvas: {fileID: 4729980676661149940}
   Dialog: {fileID: 3381550350735292471}
   QuitButton: {fileID: 6822003142634604269}
+  VolumeSlider: {fileID: 451180578149949968}
+  SensitivitySlider: {fileID: 3909455421234582677}
   popupKeyCode: 0
   DontOpen: 0
 --- !u!1 &4237054885053754437
@@ -5092,8 +5093,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 272, y: 0}
-  m_SizeDelta: {x: 544, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5141936174156906511
 MonoBehaviour:
@@ -6188,7 +6189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564633389902426095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49bd7edf1a3280848bdc998354bbd146, type: 3}
+  m_Script: {fileID: 11500000, guid: c03c0f7b370695d4ab5dd209c46b86dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6135440124405876843
@@ -6200,7 +6201,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564633389902426095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89cff907e47f4d24f8f40573db785f01, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a334cbc1ce07c34f883dec892f4d250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 2644282947843729147}
@@ -6216,7 +6217,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564633389902426095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 284cae832664c984fbc5034045093061, type: 3}
+  m_Script: {fileID: 11500000, guid: 242c91a1bbe074949a32dab5d9652638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   resolution: {fileID: 4111258848855103732}
@@ -6236,7 +6237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564633389902426095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6237689ae8f19734698a8f9d45192905, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c3a86b9c0d550e438bf6b53ab9b7c45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fpsLabel: {fileID: 6881120264570738512}
@@ -6250,7 +6251,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5564633389902426095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b55cc30fc7913374c854fa34b5b88e41, type: 3}
+  m_Script: {fileID: 11500000, guid: f2074d311c5b10841ae90fd22beb5e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 2644282947843729147}
@@ -8585,8 +8586,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 272, y: 0}
-  m_SizeDelta: {x: 544, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &211902255029664151
 CanvasRenderer:

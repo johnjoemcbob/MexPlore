@@ -85,11 +85,15 @@ public class WalkController : BaseController
         }
         else if ( DisabledStillNormaliseBodyHeight )
         {
-            // If not in control, still normalise body height relative to feet
-            Vector3 pos = Body.transform.position;
-            NormalisedHeight = NormaliseBodyPos( pos );
-            pos.y = Mathf.Lerp( pos.y, NormalisedHeight, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
-            Body.GetComponent<MechBody>().SetTargetPos( pos );
+            var player = Body.GetComponentInChildren<MechCockpitDock>().GetComponentInChildren<Player>();
+            if ( player == null || player == LocalPlayer.Instance.Player )
+            {
+                // If not in control, still normalise body height relative to feet
+                Vector3 pos = Body.transform.position;
+                NormalisedHeight = NormaliseBodyPos( pos );
+                pos.y = Mathf.Lerp( pos.y, NormalisedHeight, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
+                Body.GetComponent<MechBody>().SetTargetPos( pos );
+            }
         }
 
         UpdateLegs();
@@ -139,10 +143,16 @@ public class WalkController : BaseController
     #region Body
     float NormaliseBodyPos( Vector3 pos, float updist = MexPlore.CAST_SPHERE_UP )
     {
-        Vector3 ground = MexPlore.RaycastToGroundSphere( pos, updist );
+        RaycastHit hit = MexPlore.RaycastToGroundSphereHit( pos, updist );
+        Vector3 ground = hit.point;
+            if ( hit.collider == null )
+		    {
+                ground = pos;
+		    }
         float target = ground.y + BodyHeightOffset + GetRaisedLegCount() * BodyLegRaiseHeightOffset;
         //float normalised = Mathf.Lerp( NormalisedHeight, target, Time.deltaTime * BodyHeightNormaliseLerpSpeed );
         float normalised = target;
+        Body.GetComponent<MechBody>().SetParent( hit.transform );
 
         //DebugLastSphereCast = Body.transform.position + Vector3.up * updist;
         //DebugLastSphereCastHit = ground;
@@ -155,13 +165,16 @@ public class WalkController : BaseController
     void UpdateLegs()
     {
         // Keep the leg target positions static despite being child of the body
-        for ( int leg = 0; leg < Legs[LEFT].Legs.Length; leg++ )
+        if ( GetComponentInParent<BoatController>() == null )
         {
-            Legs[LEFT].Legs[leg].position = LegDatas[LEFT][leg].Position;
-        }
-        for ( int leg = 0; leg < Legs[RIGHT].Legs.Length; leg++ )
-        {
-            Legs[RIGHT].Legs[leg].position = LegDatas[RIGHT][leg].Position;
+            for ( int leg = 0; leg < Legs[LEFT].Legs.Length; leg++ )
+            {
+                Legs[LEFT].Legs[leg].position = LegDatas[LEFT][leg].Position;
+            }
+            for ( int leg = 0; leg < Legs[RIGHT].Legs.Length; leg++ )
+            {
+                Legs[RIGHT].Legs[leg].position = LegDatas[RIGHT][leg].Position;
+            }
         }
     }
 
