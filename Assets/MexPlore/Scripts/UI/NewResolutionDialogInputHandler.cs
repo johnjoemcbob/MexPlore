@@ -35,6 +35,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	public Slider VolumeSlider;
 	public Slider SensitivitySlider;
 	public Toggle NetworkToggle;
+	public Toggle KeyboardToggle;
 
 	[SerializeField]
 	private KeyCode popupKeyCode = KeyCode.Escape;
@@ -70,7 +71,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 					//	Application.platform == RuntimePlatform.WindowsPlayer ||
 					//	Application.platform == RuntimePlatform.WindowsEditor
 					//) &&
-					Input.GetKeyUp( KeyCode.Escape )
+					Input.GetButtonUp( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CURSOR_RELEASE ) )
 				)
 			);
 
@@ -101,6 +102,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 			VolumeSlider.value = MexPlore.GlobalVolume;
 			SensitivitySlider.value = MexPlore.MouseSensitivity;
 			NetworkToggle.isOn = MexPlore.OnlineMode;
+			KeyboardToggle.isOn = MexPlore.Keyboard;
 			if ( LocalPlayer.Instance != null )
 			{
 				LocalPlayer.Instance.SwitchState( LocalPlayer.State.UI );
@@ -139,6 +141,16 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	public void UpdateNetworkToggle( bool toggle )
 	{
 		MexPlore.OnlineMode = toggle;
+	}
+
+	public void UpdateKeyboardToggle( bool toggle )
+	{
+		MexPlore.Keyboard = toggle;
+
+		foreach ( var input in FindObjectsOfType<InputControlRow>( true ) )
+		{
+			input.Apply();
+		}
 	}
 
 #elif ENABLE_INPUT_SYSTEM

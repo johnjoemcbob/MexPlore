@@ -9,6 +9,8 @@ public class Game : MonoBehaviour
     public static Game Instance;
     public static Transform RuntimeParent;
 
+    public Sprite[] InputSpritesheet;
+
     private bool Loading = false;
     private string CrossoverMech = "";
     private int CrossoverMaterial = 0;
@@ -34,15 +36,15 @@ public class Game : MonoBehaviour
     void Update()
     {
         //if ( Application.isEditor )
-		{
-			for ( int i = 1; i <= 5; i++ )
-			{
-                if ( Input.GetKeyDown( KeyCode.Alpha0 + i ) )
-				{
-                    LoadLevel( i );
-				}
-			}
-		}
+		//{
+		//	for ( int i = 1; i <= 5; i++ )
+		//	{
+  //              if ( Input.GetKeyDown( KeyCode.Alpha0 + i ) )
+		//		{
+  //                  LoadLevel( i );
+		//		}
+		//	}
+		//}
     }
 	#endregion
 

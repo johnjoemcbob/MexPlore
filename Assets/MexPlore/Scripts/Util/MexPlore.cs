@@ -107,13 +107,16 @@ public static class MexPlore
     }
 
     public static string[] Control;
+    public static string[][] ControlText;
+    public static Sprite[][] ControlSprite;
     public static float MouseSensitivity = 0.5f;
+    public static bool Keyboard = true;
 
     public static void InitControls()
     {
         Control = new string[(int) CONTROL.COUNT];
 
-        Control[(int) CONTROL.BUTTON_CURSOR_RELEASE] = "Cancel";
+        Control[(int) CONTROL.BUTTON_CURSOR_RELEASE] = "Menu";
         Control[(int) CONTROL.BUTTON_RESET] = "Reset";
 
         Control[(int) CONTROL.AXIS_FORWARD] = "Vertical";
@@ -134,11 +137,90 @@ public static class MexPlore
         Control[(int) CONTROL.BUTTON_CRAWL_CLAMP] = "Jump";
 
         Control[(int) CONTROL.BUTTON_SPEAK] = "Talk";
+
+        ControlText = new string[2][];
+        ControlText[0] = new string[(int) CONTROL.COUNT];
+        ControlText[1] = new string[(int) CONTROL.COUNT];
+        {
+            SetupControlText( CONTROL.BUTTON_CURSOR_RELEASE, "Esc", "Start" );
+
+            SetupControlText( CONTROL.BUTTON_RESET, "R", "Back" );
+
+            SetupControlText( CONTROL.AXIS_FORWARD, "W/S/Up/Down", "Left Joystick" );
+            SetupControlText( CONTROL.AXIS_RIGHT, "A/D/Left/Right", "Left Joystick" );
+
+            SetupControlText( CONTROL.BUTTON_HELI_THRUST, "Spacebar", "A" );
+            SetupControlText( CONTROL.BUTTON_HELI_UNDOCK, "Middle Mouse", "Y" );
+
+            SetupControlText( CONTROL.BUTTON_ARM_LEFT, "Left Mouse", "X" );
+            SetupControlText( CONTROL.BUTTON_ARM_RIGHT, "Right Mouse", "B" );
+
+            SetupControlText( CONTROL.BUTTON_MECH_JUMP, "Spacebar", "A" );
+
+            SetupControlText( CONTROL.BUTTON_BRIDGE_EXTEND, "Spacebar", "A" );
+            SetupControlText( CONTROL.BUTTON_CRAWL_CLAMP, "Spacebar", "A" );
+
+            SetupControlText( CONTROL.BUTTON_SPEAK, "H", "Press Right Joystick" );
+        }
+
+        ControlSprite = new Sprite[2][];
+        ControlSprite[0] = new Sprite[(int) CONTROL.COUNT];
+        ControlSprite[1] = new Sprite[(int) CONTROL.COUNT];
+        {
+            SetupControlSprite( CONTROL.BUTTON_CURSOR_RELEASE, 289, 613 );
+
+            SetupControlSprite( CONTROL.BUTTON_RESET, 360, 644 );
+
+            SetupControlSprite( CONTROL.AXIS_FORWARD, 142, 252 );
+            SetupControlSprite( CONTROL.AXIS_RIGHT, 141, 251 );
+
+            SetupControlSprite( CONTROL.BUTTON_HELI_THRUST, 508, 4 );
+            SetupControlSprite( CONTROL.BUTTON_HELI_UNDOCK, 79, 7 );
+
+            SetupControlSprite( CONTROL.BUTTON_ARM_LEFT, 77, 6 );
+            SetupControlSprite( CONTROL.BUTTON_ARM_RIGHT, 78, 5 );
+
+            SetupControlSprite( CONTROL.BUTTON_MECH_JUMP, 508, 4 );
+
+            SetupControlSprite( CONTROL.BUTTON_BRIDGE_EXTEND, 508, 4 );
+            SetupControlSprite( CONTROL.BUTTON_CRAWL_CLAMP, 508, 4 );
+
+            SetupControlSprite( CONTROL.BUTTON_SPEAK, 397, 322 );
+        }
     }
+
+    static void SetupControlText( CONTROL control, string keyboard, string controller )
+	{
+        ControlText[0][(int) control] = keyboard;
+        ControlText[1][(int) control] = controller;
+    }
+
+    static void SetupControlSprite( CONTROL control, int keyboard, int controller )
+    {
+        ControlSprite[0][(int) control] = GetSprite( keyboard );
+        ControlSprite[1][(int) control] = GetSprite( controller );
+    }
+
+    static Sprite GetSprite( int id )
+	{
+        return Game.Instance.InputSpritesheet[id];
+	}
 
     public static string GetControl( CONTROL control )
     {
         return Control[(int) control];
+    }
+
+    public static string GetControlText( CONTROL control, bool keyboard )
+	{
+        int i = keyboard ? 0 : 1;
+        return ControlText[i][(int) control];
+	}
+
+    public static Sprite GetControlSprite( CONTROL control, bool keyboard )
+    {
+        int i = keyboard ? 0 : 1;
+        return ControlSprite[i][(int) control];
     }
     #endregion
 
