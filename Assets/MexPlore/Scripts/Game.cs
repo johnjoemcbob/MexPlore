@@ -92,6 +92,7 @@ public class Game : MonoBehaviour
                 mech.GetComponentInChildren<MechCockpitDock>().Dock( LocalPlayer.Instance.Player.GetComponent<HeliCockpit>() );
                 mech.GetComponent<MechHighlight>().Set( CrossoverMaterial );
             }
+            LocalPlayer.Instance.Player.CrossoverMechInstance = mech;
             LocalPlayer.Instance.Player.CrossoverMech = CrossoverMech;
             LocalPlayer.Instance.Player.CrossoverMaterial = CrossoverMaterial;
 

@@ -67,6 +67,7 @@ MonoBehaviour:
   Name: 
   Scale: 1
   CrossoverMech: 
+  CrossoverMechInstance: {fileID: 0}
   CrossoverMaterial: 0
 --- !u!1001 &3644928964804914748
 PrefabInstance:

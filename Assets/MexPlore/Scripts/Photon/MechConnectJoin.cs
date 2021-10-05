@@ -52,8 +52,12 @@ public class MechConnectJoin : MonoBehaviourPunCallbacks
 
         if ( !PhotonNetwork.IsConnected )
         {
-            PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = this.Version + "." + SceneManagerHelper.ActiveSceneBuildIndex;
+            PhotonNetwork.OfflineMode = !MexPlore.OnlineMode;
+            if ( !PhotonNetwork.OfflineMode )
+            {
+                PhotonNetwork.ConnectUsingSettings();
+            }
         }
     }
 

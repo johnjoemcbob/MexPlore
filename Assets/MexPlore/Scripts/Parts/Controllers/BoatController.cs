@@ -16,6 +16,7 @@ public class BoatController : BaseController
     public float RightenForceX = 5;
     public float RightenForceZ = 5;
     public float RiverForce = 1;
+    public int ParticleEngine = 4;
 
     [Header( "References" )]
     public GameObject Body;
@@ -88,12 +89,14 @@ public class BoatController : BaseController
         // Float
         //Waterborne = true;
         Waterborne = false;
+        int index = 0;
         foreach ( Transform engine in Engines )
         {
             RaycastHit hit;
             int layer = 1 << LayerMask.NameToLayer( "Water" );
             float upoff = 10;
             Vector3 up = transform.TransformDirection( Vector3.up ) * upoff;
+            bool underwater = false;
             if ( Physics.Raycast( engine.position + up, transform.TransformDirection( Vector3.down ), out hit, FloatHeight + upoff, layer ) )
             {
                 Rigidbody.AddForceAtPosition( Time.deltaTime * transform.TransformDirection( Vector3.up ) * Mathf.Pow( ( FloatHeight + upoff ) - hit.distance, 2 ) / 2f * FloatForce, engine.position );
@@ -101,6 +104,7 @@ public class BoatController : BaseController
                 engine.localScale = Vector3.one;
 
                 Waterborne = true;
+                underwater = true;
             }
             else if ( !Physics.Raycast( engine.position + up, transform.TransformDirection( Vector3.down ), out hit, FloatHeight + upoff + ExtraGravityHeight, layer ) )
             {
@@ -110,6 +114,16 @@ public class BoatController : BaseController
             }
 
             engine.localScale = Vector3.Lerp( engine.localScale, Vector3.one * 0.1f, Time.deltaTime * 5 );
+
+            if ( index == ParticleEngine )
+            {
+				foreach ( var particle in GetComponentsInChildren<ParticleSystem>( true ) )
+				{
+                    var emission = particle.emission;
+                    emission.enabled = underwater;
+                }
+            }
+            index++;
         }
 
         // ???

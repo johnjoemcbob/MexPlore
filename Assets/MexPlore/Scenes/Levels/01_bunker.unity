@@ -1080,6 +1080,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3314278748363852904, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314278748363852904, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314278748363852904, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314278748363852904, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314278748363852904, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3767487333105790241, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1280,6 +1300,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5931034909220381562, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5931034909220381562, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5931034909220381562, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5931034909220381562, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5931034909220381562, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5995451950006588204, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1306,6 +1346,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6278254216695611685, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080362344496373197, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080362344496373197, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080362344496373197, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080362344496373197, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080362344496373197, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7177815666902684377, guid: fa08f406849f23940a3e4b532559fd43, type: 3}
@@ -10045,32 +10105,6 @@ CapsuleCollider:
   m_Height: 5.9443803
   m_Direction: 1
   m_Center: {x: 0.068073146, y: 2.9721897, z: 0.47241712}
---- !u!21 &1300881630
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Hidden/FogPlus
-  m_Shader: {fileID: 4800000, guid: 39ef0b8c9be96494d9f8b2f2c54a28c5, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1001 &1307504859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12170,7 +12204,7 @@ MonoBehaviour:
   heightFogIntensity: 1
   useHeightFogOnSky: 1
   distanceHeightBlend: 0.5
-  material: {fileID: 1300881630}
+  material: {fileID: 1637296409}
 --- !u!1001 &1517688322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13078,6 +13112,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 640185021634436206, guid: eebff999d54b4944a838ebfd7a860285, type: 3}
   m_PrefabInstance: {fileID: 1630847210}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1637296409
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Hidden/FogPlus
+  m_Shader: {fileID: 4800000, guid: 39ef0b8c9be96494d9f8b2f2c54a28c5, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1001 &1642032766
 PrefabInstance:
   m_ObjectHideFlags: 0

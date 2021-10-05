@@ -25,6 +25,7 @@ public class MechBody : MonoBehaviour
 
 	private Vector3 TargetPos;
 	private Vector3 TargetDirection;
+	private Vector3 InitialPos;
 	private Quaternion TorsoRotation;
 	private Dictionary<string, int> OldLayers = new Dictionary<string, int>();
 
@@ -36,6 +37,7 @@ public class MechBody : MonoBehaviour
 		}
 		TargetPos = transform.position;
 		TargetDirection = transform.forward;
+		InitialPos = transform.position;
 	}
 
 	public virtual void Update()
@@ -94,9 +96,23 @@ public class MechBody : MonoBehaviour
 		}
 	}
 
+	public void Reset()
+	{
+		SetParent( null );
+		transform.position = InitialPos;
+		TargetPos = InitialPos;
+	}
+
 	public void SetTargetPos( Vector3 pos )
 	{
-		TargetPos = transform.parent.InverseTransformPoint( pos );
+		if ( transform.parent != null )
+		{
+			TargetPos = transform.parent.InverseTransformPoint( pos );
+		}
+		else
+		{
+			TargetPos = pos;
+		}
 	}
 
 	public void SetTargetDirection( Vector3 dir )
@@ -106,7 +122,7 @@ public class MechBody : MonoBehaviour
 
 	public void SetParent( Transform parent )
 	{
-		if ( transform.parent != parent ) //&& !parent.name.Contains( "errain" ) )
+		if ( transform.parent != parent ) //&& !parent.name.Contains( "Terrain" ) )
 		{
 			Vector3 pos = transform.position;
 			transform.SetParent( parent );

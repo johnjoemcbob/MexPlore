@@ -18,7 +18,6 @@ public class Building : MonoBehaviour
 	[HideInInspector]
 	public bool Idle = false;
 
-
 	void Start()
     {
 		// Apply tags and layers to all children
@@ -124,7 +123,8 @@ public class Building : MonoBehaviour
 
 		if ( other.tag == "Building" )
 		{
-			other.GetComponentInParent<Building>().TakeDamage( MexPlore.DAMAGE_BUILDING_FALL, transform.position );
+			//other.GetComponentInParent<Building>().TakeDamage( MexPlore.DAMAGE_BUILDING_FALL, transform.position );
+			other.GetComponentInParent<Building>().TakeDamage( MexPlore.DAMAGE_BUILDING_FALL, FallPos );
 		}
 	}
 

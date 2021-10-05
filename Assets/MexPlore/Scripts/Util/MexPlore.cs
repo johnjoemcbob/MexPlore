@@ -82,6 +82,7 @@ public static class MexPlore
 	public enum CONTROL
     {
         BUTTON_CURSOR_RELEASE,
+        BUTTON_RESET,
 
         AXIS_FORWARD,
         AXIS_RIGHT,
@@ -113,6 +114,7 @@ public static class MexPlore
         Control = new string[(int) CONTROL.COUNT];
 
         Control[(int) CONTROL.BUTTON_CURSOR_RELEASE] = "Cancel";
+        Control[(int) CONTROL.BUTTON_RESET] = "Reset";
 
         Control[(int) CONTROL.AXIS_FORWARD] = "Vertical";
         Control[(int) CONTROL.AXIS_RIGHT] = "Horizontal";
@@ -141,6 +143,8 @@ public static class MexPlore
     #endregion
 
     #region Static - OTHER
+    public static bool OnlineMode = true;
+
     public const float DAMAGE_PUNCH = 2;
     public const float DAMAGE_BUILDING_FALL = 1;
     #endregion

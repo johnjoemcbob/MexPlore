@@ -13,6 +13,8 @@ public class Player : MonoBehaviourPun
 	[HideInInspector]
 	public string CrossoverMech;
 	[HideInInspector]
+	public GameObject CrossoverMechInstance;
+	[HideInInspector]
 	public int CrossoverMaterial;
 
 	private PhotonView PhotonView;

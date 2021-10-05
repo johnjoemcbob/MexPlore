@@ -196,5 +196,7 @@ public class HeliCockpit : MonoBehaviour
 		}
 
         StaticHelpers.GetOrCreateCachedAudioSource( SoundUnDock, transform.position, 1, MexPlore.GetVolume( MexPlore.SOUND.HELI_UNDOCK ) );
+
+        transform.localEulerAngles = new Vector3( 0, transform.localEulerAngles.y, 0 );
     }
 }

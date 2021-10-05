@@ -53,19 +53,29 @@ public class LocalPlayer : MonoBehaviour
 			LastPos = transform.position;
 		}
 
-		//if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_CURSOR_RELEASE ) ) )
-		//{
-		//	if ( Cursor.visible )
-		//	{
-		//		Cursor.visible = false;
-		//		Cursor.lockState = CursorLockMode.Locked;
-		//	}
-		//	else
-		//	{
-		//		Cursor.visible = true;
-		//		Cursor.lockState = CursorLockMode.None;
-		//	}
-		//}
+		if ( Input.GetButtonDown( MexPlore.GetControl( MexPlore.CONTROL.BUTTON_RESET ) ) )
+		{
+			var body = Player.GetComponentInParent<MechBody>();
+			if ( body == null )
+			{
+				// If not in a mech, reset heli
+				Player.transform.position = Vector3.zero;
+			}
+			else
+			{
+				// Otherwise reset mech
+				body.Reset();
+			}
+
+			// If it brought a crossover mech and that mech is currently empty then reset it also
+			if ( Player.CrossoverMechInstance != null )
+			{
+				if ( Player.CrossoverMechInstance.GetComponentInChildren<HeliCockpit>() == null )
+				{
+					Player.CrossoverMechInstance.GetComponent<MechBody>().Reset();
+				}
+			}
+		}
 	}
 
 	public void OnSpawn()

@@ -34,6 +34,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	public GameObject QuitButton;
 	public Slider VolumeSlider;
 	public Slider SensitivitySlider;
+	public Toggle NetworkToggle;
 
 	[SerializeField]
 	private KeyCode popupKeyCode = KeyCode.Escape;
@@ -99,6 +100,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 			QuitButton.SetActive( Application.platform != RuntimePlatform.WebGLPlayer );
 			VolumeSlider.value = MexPlore.GlobalVolume;
 			SensitivitySlider.value = MexPlore.MouseSensitivity;
+			NetworkToggle.isOn = MexPlore.OnlineMode;
 			if ( LocalPlayer.Instance != null )
 			{
 				LocalPlayer.Instance.SwitchState( LocalPlayer.State.UI );
@@ -132,6 +134,11 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	public void UpdateSensitivitySlider( float value )
 	{
 		MexPlore.MouseSensitivity = value;
+	}
+
+	public void UpdateNetworkToggle( bool toggle )
+	{
+		MexPlore.OnlineMode = toggle;
 	}
 
 #elif ENABLE_INPUT_SYSTEM
