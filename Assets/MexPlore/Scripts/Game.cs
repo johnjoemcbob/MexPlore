@@ -35,17 +35,17 @@ public class Game : MonoBehaviour
 
     void Update()
     {
-        //if ( Application.isEditor )
-		//{
-		//	for ( int i = 1; i <= 5; i++ )
-		//	{
-  //              if ( Input.GetKeyDown( KeyCode.Alpha0 + i ) )
-		//		{
-  //                  LoadLevel( i );
-		//		}
-		//	}
-		//}
-    }
+		if ( Application.isEditor )
+		{
+			for ( int i = 1; i <= 5; i++ )
+			{
+				if ( Input.GetKeyDown( KeyCode.Alpha0 + i ) )
+				{
+					LoadLevel( i );
+				}
+			}
+		}
+	}
 	#endregion
 
 	#region Levels / Scenes

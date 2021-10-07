@@ -36,6 +36,7 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 	public Slider SensitivitySlider;
 	public Toggle NetworkToggle;
 	public Toggle KeyboardToggle;
+	public GameObject InfoPanel;
 
 	[SerializeField]
 	private KeyCode popupKeyCode = KeyCode.Escape;
@@ -58,6 +59,8 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 			ToggleCanvas();
 			ToggleCanvas();
 		}
+
+		InfoPanel.SetActive( false );
 	}
 
 	private IEnumerator WaitForActivation()
@@ -117,6 +120,11 @@ public class NewResolutionDialogInputHandler : MonoBehaviour
 			}
 		}
 		Dialog.SetActive( dialogCanvas.enabled );
+	}
+
+	public void ButtonInfo()
+	{
+		InfoPanel.SetActive( !InfoPanel.activeSelf );
 	}
 
 	public void ButtonClose()

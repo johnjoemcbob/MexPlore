@@ -26,6 +26,7 @@ public class MechBody : MonoBehaviour
 	private Vector3 TargetPos;
 	private Vector3 TargetDirection;
 	private Vector3 InitialPos;
+	private Quaternion InitialRot;
 	private Quaternion TorsoRotation;
 	private Dictionary<string, int> OldLayers = new Dictionary<string, int>();
 
@@ -38,6 +39,7 @@ public class MechBody : MonoBehaviour
 		TargetPos = transform.position;
 		TargetDirection = transform.forward;
 		InitialPos = transform.position;
+		InitialRot = transform.rotation;
 	}
 
 	public virtual void Update()
@@ -99,8 +101,15 @@ public class MechBody : MonoBehaviour
 	public void Reset()
 	{
 		SetParent( null );
-		transform.position = InitialPos;
-		TargetPos = InitialPos;
+
+		var initial = InitialPos;
+		if ( GetComponentInChildren<BoatController>() )
+		{
+			//initial += transform.forward * 20;
+		}
+		transform.position = initial;
+		transform.rotation = InitialRot;
+		TargetPos = initial;
 	}
 
 	public void SetTargetPos( Vector3 pos )
@@ -122,7 +131,7 @@ public class MechBody : MonoBehaviour
 
 	public void SetParent( Transform parent )
 	{
-		if ( transform.parent != parent ) //&& !parent.name.Contains( "Terrain" ) )
+		if ( transform.parent != parent && ( parent == null || parent.GetComponentInParent<Building>() == null ) ) //&& !parent.name.Contains( "Terrain" ) )
 		{
 			Vector3 pos = transform.position;
 			transform.SetParent( parent );

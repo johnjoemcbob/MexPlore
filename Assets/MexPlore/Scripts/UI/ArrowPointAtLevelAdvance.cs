@@ -20,7 +20,7 @@ public class ArrowPointAtLevelAdvance : MonoBehaviour
         Body = GetComponentInParent<MechBody>();
         if ( Body != null )
 		{
-            transform.position = Body.transform.position;
+            transform.position = Body.GetComponentInChildren<Torso>().transform.position;
             transform.GetChild( 0 ).gameObject.SetActive( true );
         }
         else
